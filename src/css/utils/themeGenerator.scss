@@ -1,0 +1,17 @@
+@import "../default-theme";
+
+:root {
+  @each $name, $color in $default-theme {
+    --q-#{"" + $name}: #{$color};
+  }
+}
+
+@each $name, $color in $default-theme {
+  .text-#{"" + $name} {
+    color: var(--q-#{$name}) !important;
+  }
+
+  .bg-#{"" + $name} {
+    background: var(--q-#{$name}) !important;
+  }
+}
