@@ -1,3 +1,5 @@
-/* app global css */
-
 @import "utils/themeGenerator";
+
+body {
+  color: var(--q-text);
+}

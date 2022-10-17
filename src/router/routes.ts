@@ -1,5 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
-import routesPages from '~pages'
+import routesPages from '~pages';
+
+console.log(routesPages);
 
 const routes: RouteRecordRaw[] = [
   {
