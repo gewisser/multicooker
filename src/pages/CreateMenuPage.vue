@@ -1,5 +1,5 @@
 <template>
-  <div>Сохраненные блюда</div>
+  <div>Создать блюдо</div>
 </template>
 
 <style scoped></style>
@@ -8,7 +8,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'SavedMenuPage',
+  name: 'CreateMenuPage',
 
   setup() {
     return {};

@@ -14,13 +14,35 @@
 
       <q-tabs align="left">
         <q-route-tab :to="{ name: 'IndexPage' }" label="Блюда" />
-        <q-route-tab :to="{ name: 'ManualControlPage' }" label="Создать" />
-        <q-route-tab :to="{ name: 'SavedMenuPage' }" label="Управление" />
+        <q-route-tab :to="{ name: 'CreateMenuPage' }" label="Создать" />
+        <q-route-tab :to="{ name: 'ManualControlPage' }" label="Управление" />
       </q-tabs>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" overlay elevated>
-      <!-- drawer content -->
+      <q-list padding>
+        <q-item-label header>Настройки</q-item-label>
+
+        <q-item clickable v-ripple>
+          <q-item-section>
+            <q-item-label>Wi-Fi</q-item-label>
+            <q-item-label caption>
+              Настройка пароля и логина подключения к Вашей точке доступа
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable v-ripple>
+          <q-item-section>
+            <q-item-label>ПИД регулятор</q-item-label>
+            <q-item-label caption>
+              Настройки коэффициентов пид регуляора нагревателя
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-separator spaced />
+      </q-list>
     </q-drawer>
 
     <q-page-container>
