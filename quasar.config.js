@@ -9,8 +9,24 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 const { configure } = require('quasar/wrappers');
+const zlib = require('zlib');
+const path = require('path');
 
-module.exports = configure(function (/* ctx */) {
+function compress(content, algorithm, options = {}) {
+  return new Promise((resolve, reject) => {
+    zlib[algorithm](content, options, (err, result) =>
+      err ? reject(err) : resolve(result)
+    );
+  });
+}
+
+function getOutputFileName(filepath, ext) {
+  const compressExt = ext.startsWith('.') ? ext : `.${ext}`;
+  //const filepath = path.parse(file);
+  return `${filepath}${compressExt}`;
+}
+
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -70,6 +86,29 @@ module.exports = configure(function (/* ctx */) {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
+
+      async afterBuild() {
+        const fs = require('fs');
+
+        const publicCompressed = ['icons.svg', 'favicon.svg'];
+
+        for (const fileC of publicCompressed) {
+          const compressedFile = path.join(
+            process.cwd(),
+            'dist',
+            ctx.modeName,
+            fileC
+          );
+
+          let content = fs.readFileSync(compressedFile);
+          fs.unlinkSync(compressedFile);
+
+          content = await compress(content, 'brotliCompress');
+          const cname = getOutputFileName(compressedFile, '.br');
+
+          await fs.writeFileSync(cname, content);
+        }
+      },
 
       vitePlugins: [
         [

@@ -17,14 +17,18 @@
       track-color="orange-3"
       class="text-orange q-ma-md"
     />
+
+    <SvgUse icon="menu1" width="100px" height="auto"></SvgUse>
   </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import SvgUse from 'components/SvgUse.vue';
 
 export default defineComponent({
   name: 'IndexPage',
+  components: { SvgUse },
   setup() {
     const knobVal = ref(0);
 

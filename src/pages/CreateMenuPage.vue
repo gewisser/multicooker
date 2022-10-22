@@ -1,17 +1,28 @@
 <template>
-  <div>Создать блюдо</div>
+  <q-page class="column q-pa-lg">
+    <GalleryImg :image-data="imageData" />
+  </q-page>
 </template>
 
 <style scoped></style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import GalleryImg from 'components/GalleryImg.vue';
+import type { IImageData } from 'src/models/Gallery';
 
 export default defineComponent({
   name: 'CreateMenuPage',
-
+  components: { GalleryImg },
   setup() {
-    return {};
+    const imageData = ref<IImageData>({
+      homeImgUrl: undefined,
+      images: [],
+    });
+
+    return {
+      imageData,
+    };
   },
 });
 </script>
