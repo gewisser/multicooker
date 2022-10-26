@@ -6,6 +6,10 @@ https://looka.com/editor/99414260
 
 https://fonts.google.com/icons
 
+https://console.cloud.yandex.ru/folders/b1ghvc6rhvlnl3h54us5/storage/buckets/multicooker
+
+https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObject-property
+
 ## Install the dependencies
 ```bash
 yarn

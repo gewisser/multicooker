@@ -12,10 +12,22 @@
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs align="left">
-        <q-route-tab :to="{ name: 'IndexPage' }" label="Блюда" />
-        <q-route-tab :to="{ name: 'CreateMenuPage' }" label="Создать" />
-        <q-route-tab :to="{ name: 'ManualControlPage' }" label="Управление" />
+      <q-tabs align="justify">
+        <q-route-tab
+          icon="menu_book"
+          :to="{ name: 'IndexPage' }"
+          label="Блюда"
+        />
+        <q-route-tab
+          icon="assignment_add"
+          :to="{ name: 'CreateMenuPage' }"
+          label="Создать"
+        />
+        <q-route-tab
+          icon="engineering"
+          :to="{ name: 'ManualControlPage' }"
+          label="я сам"
+        />
       </q-tabs>
     </q-header>
 

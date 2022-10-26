@@ -88,9 +88,11 @@ module.exports = configure(function (ctx) {
       // viteVuePluginOptions: {},
 
       async afterBuild() {
+        return;
+
         const fs = require('fs');
 
-        const publicCompressed = ['icons.svg', 'favicon.svg'];
+        const publicCompressed = ['favicon.svg'];
 
         for (const fileC of publicCompressed) {
           const compressedFile = path.join(
@@ -117,6 +119,7 @@ module.exports = configure(function (ctx) {
             deleteOriginFile: true,
             algorithm: 'brotliCompress',
             threshold: 500,
+            disable: true,
           },
         ],
         [
@@ -149,7 +152,8 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Dialog'],
+      lang: 'ru',
     },
 
     // animations: 'all', // --- includes all animations

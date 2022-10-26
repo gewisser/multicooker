@@ -1,5 +1,6 @@
 export interface IImageList {
   url: string;
+  fileName: string;
 }
 
 export interface IImageData {

@@ -126,10 +126,14 @@ export default defineComponent({
         fileInput.value.value = '';
       }
 
-      const fileLink = await S3.Upload(fileData, '/img/');
+      const fileLink = await S3.Upload(
+        fileData,
+        import.meta.env.VITE_S3_IMG_DIR
+      );
 
       imageDataRef.value.images.push({
         url: fileLink,
+        fileName: fileData.fileName,
       });
 
       defaultImg.value = fileLink;
