@@ -1,11 +1,11 @@
 <template>
   <q-page class="column q-pa-lg form-page">
-    <GalleryImg :image-data="newData.imageData" />
+    <GalleryImg :image-data="dish.imageData" />
 
     <q-input
       rounded
       outlined
-      v-model="newData.description"
+      v-model="dish.description"
       label="Опишите как готовить блюдо"
       type="textarea"
       autogrow
@@ -20,7 +20,7 @@
       </div>
       <q-knob
         :step="1"
-        v-model="newData.cooking_temperature"
+        v-model="dish.cooking_temperature"
         show-value
         size="120px"
         :max="300"
@@ -36,14 +36,14 @@
     <div class="column group-set">
       <q-toggle
         size="48px"
-        v-model="newData.auto_heating"
+        v-model="dish.auto_heating"
         label="Установить температуру подогрева?"
       />
 
-      <div v-if="newData.auto_heating" class="column items-center">
+      <div v-if="dish.auto_heating" class="column items-center">
         <q-knob
           :step="1"
-          v-model="newData.auto_heating_temp"
+          v-model="dish.auto_heating_temp"
           show-value
           size="120px"
           :max="70"
@@ -96,14 +96,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import GalleryImg from 'components/GalleryImg.vue';
-import { useLocalStorage } from '@vueuse/core';
-import type { IDish } from 'src/models/Dish';
-import { nanoid } from 'nanoid';
 import { useQuasar } from 'quasar';
 import useS3 from 'src/composables/useS3';
 import AppTimer from 'components/AppTimer.vue';
-
-const NEW_DISH_KEY = 'new-menu';
+import { useDish } from 'stores/appStore';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
   name: 'CreateMenuPage',
@@ -111,23 +108,9 @@ export default defineComponent({
   setup() {
     const $q = useQuasar();
     const S3 = useS3();
+    const dishStore = useDish();
 
-    function getDish() {
-      return {
-        id: nanoid(),
-        imageData: {
-          homeImgUrl: undefined,
-          images: [],
-        },
-        description: '',
-        cooking_temperature: 100,
-        cooking_time: 0,
-        auto_heating: true,
-        auto_heating_temp: 40,
-      };
-    }
-
-    const newData = useLocalStorage<IDish>(NEW_DISH_KEY, getDish());
+    const { dish } = storeToRefs(dishStore);
 
     function onDeleteClick() {
       $q.dialog({
@@ -136,17 +119,17 @@ export default defineComponent({
         cancel: true,
         persistent: true,
       }).onOk(() => {
-        newData.value.imageData.images.forEach((image) => {
+        dish.value.imageData.images.forEach((image) => {
           S3.Delete(image.fileName, import.meta.env.VITE_S3_IMG_DIR);
         });
 
-        newData.value = getDish();
+        dishStore.newDish();
       });
     }
 
     return {
       onDeleteClick,
-      newData,
+      dish,
     };
   },
 });
