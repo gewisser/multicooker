@@ -39,7 +39,7 @@ jobs:
     - name: Create release
       uses: actions/download-artifact@v3
       with:
-        name: my-artifact
+        name: build-${{ github.run_attempt }}
         path: artifact    
         
     - uses: ncipollo/release-action@main
