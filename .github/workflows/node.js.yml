@@ -30,7 +30,7 @@ jobs:
     - name: Build...
       run: npm run build:pwa
       
-    - name: zip dist
+    - name: Zip dist
       uses: montudor/action-zip@v1
       with:
         args: zip -qq -r dist.zip dist      
@@ -51,5 +51,7 @@ jobs:
       uses: ncipollo/release-action@main
       with:
         artifacts: dist.zip
-        tag: test
+        generateReleaseNotes: true
+        replacesArtifacts: true
+        name: Release - ${{ github.run_attempt }}
         token: ${{ secrets.GITHUB_TOKEN }}  
