@@ -16,14 +16,20 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, toRef, watch } from 'vue';
 import AppTimerDigit from 'components/AppTimer/AppTimerDigit.vue';
 import { useStopwatch } from 'vue-timer-hook';
 
 export default defineComponent({
   name: 'AppTimer',
   components: { AppTimerDigit },
-  setup() {
+  props: {
+    modelValue: {
+      type: Number,
+      default: 0,
+    },
+  },
+  setup(props) {
     const secondsFirst = ref(0);
     const secondsSecond = ref(0);
     const minutesFirst = ref(0);
@@ -31,9 +37,10 @@ export default defineComponent({
     const hoursFirst = ref(0);
     const hoursSecond = ref(0);
 
-    //const stopwatchOffset = new Date();
-
-    const stopwatch = useStopwatch(0, true);
+    const stopwatch = useStopwatch(
+      getSecondsFromStart(props.modelValue),
+      props.modelValue > 0
+    );
 
     function getSplitNumb(numb: number) {
       const sStr = String(numb);
@@ -51,6 +58,18 @@ export default defineComponent({
 
       return [first, second];
     }
+
+    function getSecondsFromStart(value: number) {
+      if (value === 0) {
+        return 0;
+      }
+
+      return Math.trunc(new Date().getTime() / 1000) - value;
+    }
+
+    watch(toRef(props, 'modelValue'), (value) => {
+      stopwatch.reset(getSecondsFromStart(value), value > 0);
+    });
 
     watch(
       stopwatch.seconds,

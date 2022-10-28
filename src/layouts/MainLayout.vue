@@ -14,16 +14,21 @@
 
       <q-tabs align="justify">
         <q-route-tab
+          class="round-top-focus"
+          :disable="dish.total_time > 0"
           icon="menu_book"
           :to="{ name: 'IndexPage' }"
           label="Блюда"
         />
         <q-route-tab
+          class="round-top-focus"
           icon="assignment_add"
           :to="{ name: 'CreateMenuPage' }"
           label="Создать"
         />
         <q-route-tab
+          class="round-top-focus"
+          :disable="dish.total_time > 0"
           icon="engineering"
           :to="{ name: 'ManualControlPage' }"
           label="я сам"
@@ -62,29 +67,53 @@
     </q-page-container>
 
     <q-footer reveal elevated class="bg-bg text-text">
-      <q-toolbar>
-        <q-toolbar-title>
-          <div>Title</div>
-        </q-toolbar-title>
+      <q-toolbar class="justify-between text-body1">
+        <div>{{ stauses }}</div>
+        <div class="flex text-h6 items-center" style="column-gap: 6px">
+          <q-icon name="thermostat_auto" size="32px" />
+          <div>{{ cooking.current_temperature }}</div>
+          <div>°C</div>
+        </div>
       </q-toolbar>
     </q-footer>
   </q-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-//import { useRouter, useRoute } from 'vue-router';
+import { computed, defineComponent, ref } from 'vue';
+import { useDish } from 'stores/appStore';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
   name: 'MainLayout',
 
   setup() {
     const leftDrawerOpen = ref(false);
+    const dishStore = useDish();
+    const { dish, cooking } = storeToRefs(dishStore);
+
+    dishStore.getDishList().then();
+
+    const stauses = computed(() => {
+      if (cooking.value.cooking_time > 0) {
+        return 'Приготовление...';
+      }
+
+      if (dish.value.total_time > 0) {
+        return 'Нагрев мультиварки...';
+      }
+
+      return 'В ожидани';
+    });
+
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
+      dish,
+      stauses,
+      cooking,
     };
   },
 });

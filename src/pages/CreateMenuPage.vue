@@ -5,12 +5,19 @@
     <q-input
       rounded
       outlined
+      v-model="dish.title"
+      label="Название блюда"
+      input-class="text-h6"
+    />
+
+    <q-input
+      rounded
+      outlined
       v-model="dish.description"
       label="Опишите как готовить блюдо"
       type="textarea"
       autogrow
-    >
-    </q-input>
+    />
 
     <q-separator inset />
 
@@ -60,30 +67,49 @@
     <div class="column items-center group-set">
       <div class="column items-center">
         <div class="text-grey-6">Общее время приготовления</div>
-        <AppTimer style="font-size: 16px" />
+        <AppTimer v-model="dish.total_time" style="font-size: 16px" />
       </div>
       <div class="column items-center">
-        <div class="text-grey-6">Общее время приготовления</div>
-        <AppTimer style="font-size: 16px" />
+        <div class="text-grey-6 text-center">
+          Время приготовления<br />от достижения заданной температуры
+        </div>
+        <AppTimer v-model="cooking.cooking_time" style="font-size: 16px" />
       </div>
     </div>
 
     <q-separator inset />
 
-    <q-card-actions class="q-px-none" align="center" vertical>
+    <q-card-actions
+      class="q-px-none"
+      align="center"
+      vertical
+      style="row-gap: 20px"
+    >
       <q-btn
+        v-if="dish.total_time === 0"
         padding="10px 16px"
         icon="play_arrow"
         class="glossy"
         rounded
         color="deep-orange"
         label="Начать приготовление"
+        @click="startCooking"
+      />
+      <q-btn
+        v-if="cooking.cooking_time > 0"
+        padding="10px 16px"
+        icon="stop_circle"
+        class="glossy"
+        rounded
+        color="green"
+        label="Нажми, если блюдо готово"
+        @click="stopCooking"
       />
       <q-btn
         icon="delete_forever"
         flat
         label="Удалить"
-        color="primary"
+        color="deep-orange"
         @click="onDeleteClick"
       />
       <!--      <q-btn label="Сохранить" color="primary" text-color="white" icon="save" />-->
@@ -110,7 +136,9 @@ export default defineComponent({
     const S3 = useS3();
     const dishStore = useDish();
 
-    const { dish } = storeToRefs(dishStore);
+    const { dish, cooking } = storeToRefs(dishStore);
+
+    let timerHandle: NodeJS.Timer;
 
     function onDeleteClick() {
       $q.dialog({
@@ -124,12 +152,50 @@ export default defineComponent({
         });
 
         dishStore.newDish();
+        clearInterval(timerHandle);
+      });
+    }
+
+    function startCooking() {
+      dish.value.total_time = Math.trunc(new Date().getTime() / 1000);
+      cooking.value.current_temperature = 20;
+
+      timerHandle = setInterval(() => {
+        cooking.value.current_temperature =
+          cooking.value.current_temperature + 5;
+
+        if (
+          cooking.value.current_temperature >= dish.value.cooking_temperature &&
+          cooking.value.cooking_time === 0
+        ) {
+          cooking.value.cooking_time = Math.trunc(new Date().getTime() / 1000);
+          clearInterval(timerHandle);
+        }
+      }, 700);
+    }
+
+    function stopCooking() {
+      $q.dialog({
+        title: 'Подтвердите сохранение',
+        message: 'Вы действительно завершить приготовление и сохранить блюдо?',
+        cancel: true,
+        persistent: true,
+      }).onOk(async () => {
+        dish.value.saved_cooking_time =
+          Math.trunc(new Date().getTime() / 1000) - cooking.value.cooking_time;
+
+        await dishStore.saveToDishList(dish.value);
+
+        dishStore.newDish();
       });
     }
 
     return {
       onDeleteClick,
       dish,
+      startCooking,
+      cooking,
+      stopCooking,
     };
   },
 });
