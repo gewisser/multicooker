@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/gewisser/multicooker/actions/workflows/node.js.yml/badge.svg)](https://github.com/gewisser/multicooker/actions/workflows/node.js.yml)
+
 # multicooker (multicooker)
 
 multicooker
