@@ -33,6 +33,6 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: dist
+        artifacts: ${{ github.workspace }}\*.zip
         tag: test
         token: ${{ secrets.GITHUB_TOKEN }}  
