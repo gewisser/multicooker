@@ -51,6 +51,7 @@ jobs:
       uses: ncipollo/release-action@main
       with:
         artifacts: dist.zip
+        tag: v.1.${{ github.run_attempt }}
         generateReleaseNotes: true
         replacesArtifacts: true
         name: Release - ${{ github.run_attempt }}
