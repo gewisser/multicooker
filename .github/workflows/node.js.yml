@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js
@@ -19,20 +20,30 @@ jobs:
       with:
         node-version: lts/*
         cache: 'npm'
+        
     - name: pre    
       run: npm ci --cache .npm --prefer-offline
+      
     - name: Linting... 
       run: npm run lint
+      
     - name: Build...
       run: npm run build:pwa
+      
     - name: Create artifact
       uses: actions/upload-artifact@v3
       with:
         name: build-${{ github.run_attempt }}
         path: dist
+        
     - name: Create release
-      uses: ncipollo/release-action@v1
+      uses: actions/download-artifact@v3
       with:
-        artifacts: ${{ github.workspace }}\*.zip
+        name: my-artifact
+        path: artifact    
+        
+    - uses: ncipollo/release-action@main
+      with:
+        artifacts: artifact\*.zip
         tag: test
         token: ${{ secrets.GITHUB_TOKEN }}  
