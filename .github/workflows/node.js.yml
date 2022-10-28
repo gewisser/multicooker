@@ -44,15 +44,15 @@ jobs:
 #     - name: Create release
 #       uses: actions/download-artifact@v3
 #       with:
-#         name: build-${{ github.run_attempt }}
+#         name: build-${{github.ref_name}}
 #         path: artifact
 
     - name: Create release
       uses: ncipollo/release-action@main
       with:
         artifacts: dist.zip
-        tag: v.1.${{ github.run_attempt }}
+        tag: ${{github.ref_name}}
         generateReleaseNotes: true
         replacesArtifacts: true
-        name: Release - ${{ github.run_attempt }}
+        name: Release - ${{github.ref_name}}
         token: ${{ secrets.GITHUB_TOKEN }}
