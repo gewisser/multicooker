@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js
@@ -20,34 +20,34 @@ jobs:
       with:
         node-version: lts/*
         cache: 'npm'
-        
-    - name: pre    
+
+    - name: pre
       run: npm ci
-      
-    - name: Linting... 
+
+    - name: Linting...
       run: npm run lint
-      
+
     - name: Build...
-      run: npm run build:pwa
-      
+      run: npm run build:pwa:brotli
+
     - name: Zip dist
       uses: montudor/action-zip@v1
       with:
-        args: zip -qq -r dist.zip dist      
-      
+        args: zip -qq -r dist.zip dist
+
 #     - name: Create artifact
 #       uses: actions/upload-artifact@v3
 #       with:
 #         name: build-${{ github.run_attempt }}
 #         path: dist
-        
+
 #     - name: Create release
 #       uses: actions/download-artifact@v3
 #       with:
 #         name: build-${{ github.run_attempt }}
-#         path: artifact    
-        
-    - name: Create release        
+#         path: artifact
+
+    - name: Create release
       uses: ncipollo/release-action@main
       with:
         artifacts: dist.zip
@@ -55,4 +55,4 @@ jobs:
         generateReleaseNotes: true
         replacesArtifacts: true
         name: Release - ${{ github.run_attempt }}
-        token: ${{ secrets.GITHUB_TOKEN }}  
+        token: ${{ secrets.GITHUB_TOKEN }}
