@@ -25,3 +25,8 @@ jobs:
       run: npm run lint
     - name: Build...
       run: npm run build:pwa
+    - name: Create artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: dist      
