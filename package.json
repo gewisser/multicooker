@@ -9,10 +9,10 @@
     "dev": "quasar dev",
     "build": "quasar build",
     "build:pwa": "quasar build -m pwa",
+    "build:pwa:brotli": "cross-env BROTLI=1 quasar build -m pwa",
     "lint": "run-p eslint type-check",
     "eslint": "eslint . --ext .vue,.js,.cjs,.mjs,.ts,.cts,.mts",
     "format": "prettier --write \"**/*.{js,ts,vue,css,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "autoprefixer": "^10.4.12",
+    "cross-env": "^7.0.3",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-vue": "^9.6.0",

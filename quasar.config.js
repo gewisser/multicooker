@@ -8,6 +8,8 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
+const isBrotliCompress = process.env.BROTLI === '1';
+
 const { configure } = require('quasar/wrappers');
 const zlib = require('zlib');
 const path = require('path');
@@ -22,7 +24,6 @@ function compress(content, algorithm, options = {}) {
 
 function getOutputFileName(filepath, ext) {
   const compressExt = ext.startsWith('.') ? ext : `.${ext}`;
-  //const filepath = path.parse(file);
   return `${filepath}${compressExt}`;
 }
 
@@ -37,29 +38,8 @@ module.exports = configure(function (ctx) {
       errors: true,
     },
 
-    // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
-    // preFetch: true,
-
-    // app boot file (/src/boot)
-    // --> boot files are part of "main.js"
-    // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios'],
-
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
-
-    // https://github.com/quasarframework/quasar/tree/dev/extras
-    extras: [
-      // 'ionicons-v4',
-      // 'mdi-v5',
-      // 'fontawesome-v6',
-      // 'eva-icons',
-      // 'themify',
-      // 'line-awesome',
-      // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-      //'roboto-font', // optional, you are not bound to it
-      //'material-icons', // optional, you are not bound to it
-    ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
@@ -69,26 +49,11 @@ module.exports = configure(function (ctx) {
       },
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
-      // vueRouterBase,
-      // vueDevtools,
-      // vueOptionsAPI: false,
-
-      // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
-
-      // publicPath: '/',
-      // analyze: true,
-      // env: {},
-      // rawDefine: {}
-      // ignorePublicFolder: true,
-      // minify: false,
-      // polyfillModulePreload: true,
-      // distDir
-
-      // extendViteConf (viteConf) {},
-      // viteVuePluginOptions: {},
 
       async afterBuild() {
-        return;
+        if (!isBrotliCompress) {
+          return;
+        }
 
         const fs = require('fs');
 
@@ -119,7 +84,7 @@ module.exports = configure(function (ctx) {
             deleteOriginFile: true,
             algorithm: 'brotliCompress',
             threshold: 500,
-            disable: true,
+            disable: !isBrotliCompress,
           },
         ],
         [
