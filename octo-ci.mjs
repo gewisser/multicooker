@@ -16,7 +16,6 @@ res = await octokit.rest.repos.getLatestRelease({
   repo
 })
 
-//console.log(res)
 
 const { name } = res.data
 
@@ -32,38 +31,38 @@ const latsP = partsVersion.length - 1
 partsVersion[latsP] = parseInt(partsVersion[latsP]) + 1
 
 const newVersion = partsVersion.join('.')
+const distFileVer = `dist.tar.${newVersion}.zip`
 
-console.log(newVersion)
+console.log(`New version: ${newVersion}`)
+console.log('==============================================')
+console.log(`Create arch ${distFileVer}...`)
+execSync(`tar -zcvf ${distFileVer} dist`)
+console.log(`OK.`)
+console.log('==============================================')
+console.log(`Create new release: ${newVersion}...`)
 
-execSync('tar -zcvf sandbox_compressed.tar.zip public')
-
-//tar -zcvf sandbox_compressed.tar.gz sandbox
-
-
-/*
-const ret = await octokit.repos.createRelease({
+res = await octokit.repos.createRelease({
   owner,
   repo,
-  tag_name: 'v1.0.9',
+  tag_name: newVersion,
   target_commitish: process.env.GITHUB_REF_NAME,
-  name: 'v1.0.9',
-  body: 'Description of the release',
+  name: newVersion,
+  body: '',
   draft: false,
   prerelease: false,
   generate_release_notes: true
 })
 
+const { id } = res.data
 
-console.log(ret)
-console.log('==================================================')
+console.log(`OK. id: ${id}`)
+console.log('==============================================')
+console.log(`Upload release asset ${distFileVer} ... `)
 
-const { id } = ret.data
-
-const content = fs.readFileSync("./README.zip");
-
+const content = fs.readFileSync(`./${distFileVer}`);
 
 try {
-  const result = await octokit.rest.repos.uploadReleaseAsset({
+  res = await octokit.rest.repos.uploadReleaseAsset({
     owner,
     repo,
     release_id: id,
@@ -71,9 +70,9 @@ try {
     data: new Uint8Array(content),
   });
 
-  console.log(result)
+  console.log(`OK.`)
 
 } catch (e) {
   console.log(e)
 }
-*/
+

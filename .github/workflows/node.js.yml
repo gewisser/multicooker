@@ -23,13 +23,18 @@ jobs:
 
     - name: pre
       run: npm ci
-    - name: Test
+
+    - name: Linting...
+      run: npm run lint
+
+    - name: Build brotli dist...
+      run: npm run build:pwa:brotli
+
+
+    - name: Create release
       run: node octo-ci.mjs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: list
-      run: ls -l
-
 
 #    - name: Cpmpress dist
 #      run: tar -cvf filename.tar files/directories
