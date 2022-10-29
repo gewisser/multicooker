@@ -31,12 +31,12 @@ const latsP = partsVersion.length - 1
 partsVersion[latsP] = parseInt(partsVersion[latsP]) + 1
 
 const newVersion = partsVersion.join('.')
-const distFileVer = `dist.tar.${newVersion}.zip`
+const distFileVer = `dist.${newVersion}.tar.bz2`
 
 console.log(`New version: ${newVersion}`)
 console.log('==============================================')
 console.log(`Create arch ${distFileVer}...`)
-execSync(`tar -zcvf ${distFileVer} dist`)
+execSync(`tar -zcf ${distFileVer} dist`)
 console.log(`OK.`)
 console.log('==============================================')
 console.log(`Create new release: ${newVersion}...`)
