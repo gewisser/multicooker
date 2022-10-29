@@ -24,5 +24,3 @@ await octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
     email: 'roman@gavrilow.ru'
   }
 })
-
-GITHUB_SHA
