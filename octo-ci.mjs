@@ -1,4 +1,5 @@
 import { Octokit } from "@octokit/action";
+import fs from 'fs'
 
 const octokit = new Octokit();
 
@@ -41,16 +42,20 @@ const ret = await octokit.repos.createRelease({
 })
 
 
-// const ret = await octokit.request(`POST /repos/${owner}/${repo}/releases`, {
-//   owner,
-//   repo,
-//   tag_name: 'v1.0.1',
-//   target_commitish: process.env.GITHUB_REF_NAME,
-//   name: 'v1.0.1',
-//   body: 'Description of the release',
-//   draft: false,
-//   prerelease: false,
-//   generate_release_notes: true
-// })
-//
- console.log(ret)
+console.log(ret)
+console.log('==================================================')
+
+const { id } = data.data
+
+const content = fs.readFileSync("./README.zip", "utf-8");
+
+const result = await octokit.rest.repos.uploadReleaseAsset({
+  owner,
+  repo,
+  release_id: id,
+  name: 'test asset',
+  data: content,
+});
+
+
+console.log(result)
