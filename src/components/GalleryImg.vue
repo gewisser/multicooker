@@ -10,7 +10,7 @@
     <template v-slot:error>
       <div class="absolute-full column flex-center bg-negative text-white">
         <span>Не удалось загрузить изображение</span><br />
-        <q-icon name="mood_bad" size="48px"></q-icon>
+        <q-icon name="sym_o_mood_bad" size="48px"></q-icon>
       </div>
     </template>
 

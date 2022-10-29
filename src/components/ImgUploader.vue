@@ -32,7 +32,7 @@
                   class="absolute-full column flex-center bg-negative text-white"
                 >
                   <span>Не удалось загрузить изображение</span><br />
-                  <q-icon name="mood_bad" size="48px"></q-icon>
+                  <q-icon name="sym_o_mood_bad" size="48px"></q-icon>
                 </div>
               </template>
 
@@ -63,7 +63,7 @@
             dark-percentage
             color="secondary"
             text-color="white"
-            icon="add_a_photo"
+            icon="sym_o_add_a_photo"
             @click="onClickBtn"
           />
         </div>

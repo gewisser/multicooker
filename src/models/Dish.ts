@@ -4,6 +4,8 @@ export interface IDish {
   id: string;
   imageData: IImageData;
   title: string;
+  ingredients: string;
+  stars: number;
   description: string;
   auto_heating: boolean;
   cooking_temperature: number;

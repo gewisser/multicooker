@@ -10,3 +10,10 @@ body {
 .q-pa-none-important {
  padding: 0 !important;
 }
+
+input, textarea {
+  &::placeholder {
+    opacity: .3 !important;
+  }
+}
+

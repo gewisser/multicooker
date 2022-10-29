@@ -8,6 +8,15 @@
       v-model="dish.title"
       label="Название блюда"
       input-class="text-h6"
+      placeholder="Рагу овощное"
+    />
+
+    <q-input
+      rounded
+      outlined
+      v-model="dish.ingredients"
+      label="Перечислите через запятую ингридиенты"
+      placeholder="Картофель, лук, морковь, кабачки..."
     />
 
     <q-input
@@ -15,6 +24,7 @@
       outlined
       v-model="dish.description"
       label="Опишите как готовить блюдо"
+      placeholder="Берём, кладём, готовим..."
       type="textarea"
       autogrow
     />
@@ -88,7 +98,7 @@
       <q-btn
         v-if="dish.total_time === 0"
         padding="10px 16px"
-        icon="play_arrow"
+        icon="sym_o_play_arrow"
         class="glossy"
         rounded
         color="deep-orange"
@@ -98,7 +108,7 @@
       <q-btn
         v-if="cooking.cooking_time > 0"
         padding="10px 16px"
-        icon="stop_circle"
+        icon="sym_o_stop_circle"
         class="glossy"
         rounded
         color="green"
@@ -106,7 +116,7 @@
         @click="stopCooking"
       />
       <q-btn
-        icon="delete_forever"
+        icon="sym_o_delete_forever"
         flat
         label="Удалить"
         color="deep-orange"

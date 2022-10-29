@@ -2,7 +2,7 @@
   <q-layout view="hHh lpR fFf">
     <q-header reveal elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn dense flat round icon="sym_o_menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
           <img
@@ -16,20 +16,20 @@
         <q-route-tab
           class="round-top-focus"
           :disable="dish.total_time > 0"
-          icon="menu_book"
+          icon="sym_o_menu_book"
           :to="{ name: 'IndexPage' }"
           label="Блюда"
         />
         <q-route-tab
           class="round-top-focus"
-          icon="assignment_add"
+          icon="sym_o_assignment_add"
           :to="{ name: 'CreateMenuPage' }"
           label="Создать"
         />
         <q-route-tab
           class="round-top-focus"
           :disable="dish.total_time > 0"
-          icon="engineering"
+          icon="sym_o_engineering"
           :to="{ name: 'ManualControlPage' }"
           label="я сам"
         />
@@ -70,7 +70,7 @@
       <q-toolbar class="justify-between text-body1">
         <div>{{ stauses }}</div>
         <div class="flex text-h6 items-center" style="column-gap: 6px">
-          <q-icon name="thermostat_auto" size="32px" />
+          <q-icon name="sym_o_thermostat_auto" size="32px" />
           <div>{{ cooking.current_temperature }}</div>
           <div>°C</div>
         </div>
