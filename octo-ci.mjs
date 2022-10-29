@@ -32,9 +32,9 @@ console.log(owner, repo);
 const ret = await octokit.request(`POST /repos/${owner}/${repo}/releases`, {
   owner,
   repo,
-  tag_name: 'v1.0.0',
+  tag_name: 'v1.0.1',
   target_commitish: process.env.GITHUB_REF_NAME,
-  name: 'v1.0.0',
+  name: 'v1.0.1',
   body: 'Description of the release',
   draft: false,
   prerelease: false,
