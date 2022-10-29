@@ -14,8 +14,24 @@ res = await octokit.rest.repos.getLatestRelease({
   repo
 })
 
-console.log(res)
+//console.log(res)
 
+const { name } = res.data
+
+const partsVersion = name.split('.')
+
+if (partsVersion.length < 2) {
+  console.log('partsVersion < 2')
+  process.exit(1)
+}
+
+const latsP = partsVersion.length - 1
+
+partsVersion[latsP] = parseInt(partsVersion[latsP]) + 1
+
+const newVersion = partsVersion.join('.')
+
+console.log(newVersion)
 
 /*
 const ret = await octokit.repos.createRelease({
