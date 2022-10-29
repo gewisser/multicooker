@@ -28,6 +28,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+#    - name: Cpmpress dist
+#      run: tar -cvf filename.tar files/directories
 
 #    - name: Linting...
 #      run: npm run lint

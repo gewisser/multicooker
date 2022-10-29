@@ -9,3 +9,4 @@ const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
 
 console.log(owner, repo);
+console.log(process.env);
