@@ -32,9 +32,9 @@ console.log(owner, repo);
 const ret = await octokit.repos.createRelease({
   owner,
   repo,
-  tag_name: 'v1.0.4',
+  tag_name: 'v1.0.5',
   target_commitish: process.env.GITHUB_REF_NAME,
-  name: 'v1.0.4',
+  name: 'v1.0.5',
   body: 'Description of the release',
   draft: false,
   prerelease: false,
@@ -45,7 +45,7 @@ const ret = await octokit.repos.createRelease({
 console.log(ret)
 console.log('==================================================')
 
-const { id } = data.data
+const { id } = ret.data
 
 const content = fs.readFileSync("./README.zip", "utf-8");
 
@@ -58,10 +58,8 @@ try {
     data: content,
   });
 
+  console.log(result)
+
 } catch (e) {
   console.log(e)
 }
-
-
-
-console.log(result)
