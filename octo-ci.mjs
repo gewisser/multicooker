@@ -28,11 +28,10 @@ console.log(owner, repo);
 //
 // console.log(ret)
 
-
-const ret = await octokit.request(`POST /repos/${owner}/${repo}/releases`, {
+const ret = await octokit.repos.createRelease({
   owner,
   repo,
-  tag_name: 'v1.0.1',
+  tag_name: 'v1.0.2',
   target_commitish: process.env.GITHUB_REF_NAME,
   name: 'v1.0.1',
   body: 'Description of the release',
@@ -41,4 +40,17 @@ const ret = await octokit.request(`POST /repos/${owner}/${repo}/releases`, {
   generate_release_notes: true
 })
 
-console.log(ret)
+
+// const ret = await octokit.request(`POST /repos/${owner}/${repo}/releases`, {
+//   owner,
+//   repo,
+//   tag_name: 'v1.0.1',
+//   target_commitish: process.env.GITHUB_REF_NAME,
+//   name: 'v1.0.1',
+//   body: 'Description of the release',
+//   draft: false,
+//   prerelease: false,
+//   generate_release_notes: true
+// })
+//
+ console.log(ret)
