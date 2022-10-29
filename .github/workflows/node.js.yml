@@ -27,6 +27,9 @@ jobs:
       run: node octo-ci.mjs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: list
+      run: ls -l
+
 
 #    - name: Cpmpress dist
 #      run: tar -cvf filename.tar files/directories

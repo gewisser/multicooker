@@ -1,5 +1,7 @@
 import { Octokit } from "@octokit/action";
 import fs from 'fs'
+import { execSync } from "child_process"
+
 
 const octokit = new Octokit();
 
@@ -32,6 +34,11 @@ partsVersion[latsP] = parseInt(partsVersion[latsP]) + 1
 const newVersion = partsVersion.join('.')
 
 console.log(newVersion)
+
+execSync('tar -zcvf sandbox_compressed.tar.zip public')
+
+//tar -zcvf sandbox_compressed.tar.gz sandbox
+
 
 /*
 const ret = await octokit.repos.createRelease({
