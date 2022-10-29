@@ -25,6 +25,8 @@ jobs:
       run: npm ci
     - name: Test
       run: node octo-ci.mjs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 #    - name: Linting...
