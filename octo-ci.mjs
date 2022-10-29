@@ -12,7 +12,7 @@ console.log(owner, repo);
 console.log(process.env);
 
 
-await octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
+const ret = await octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
   owner,
   repo,
   tag: 'v0.0.1',
@@ -24,3 +24,5 @@ await octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
     email: 'roman@gavrilow.ru'
   }
 })
+
+console.log(ret)
