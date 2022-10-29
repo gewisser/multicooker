@@ -32,9 +32,9 @@ console.log(owner, repo);
 const ret = await octokit.repos.createRelease({
   owner,
   repo,
-  tag_name: 'v1.0.7',
+  tag_name: 'v1.0.8',
   target_commitish: process.env.GITHUB_REF_NAME,
-  name: 'v1.0.7',
+  name: 'v1.0.8',
   body: 'Description of the release',
   draft: false,
   prerelease: false,
@@ -47,7 +47,7 @@ console.log('==================================================')
 
 const { id } = ret.data
 
-const content = fs.readFileSync("./README.zip", "binary");
+const content = fs.readFileSync("./README.zip", "ascii");
 
 try {
   const result = await octokit.rest.repos.uploadReleaseAsset({
