@@ -12,32 +12,33 @@ console.log(owner, repo);
 //console.log(process.env);
 
 
-console.log({
-  accept: 'application/vnd.github+json',
-  owner,
-  repo,
-  tag: 'v0.0.1',
-  message: 'initial version',
-  object: process.env.GITHUB_SHA,
-  type: 'commit',
-  tagger: {
-    name: 'Roman Gavrilow',
-    email: 'roman@gavrilow.ru'
-  }
-})
+// const ret = await octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
+//   accept: 'application/vnd.github+json',
+//   owner,
+//   repo,
+//   tag: 'v0.0.1',
+//   message: 'initial version',
+//   object: process.env.GITHUB_SHA,
+//   type: 'commit',
+//   tagger: {
+//     name: 'Roman Gavrilow',
+//     email: 'roman@gavrilow.ru'
+//   }
+// })
+//
+// console.log(ret)
 
-const ret = await octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
-  accept: 'application/vnd.github+json',
+
+const ret = await octokit.request(`POST /repos/${owner}/${repo}/releases`, {
   owner,
   repo,
-  tag: 'v0.0.1',
-  message: 'initial version',
-  object: process.env.GITHUB_SHA,
-  type: 'commit',
-  tagger: {
-    name: 'Roman Gavrilow',
-    email: 'roman@gavrilow.ru'
-  }
+  tag_name: 'v1.0.0',
+  target_commitish: process.env.GITHUB_REF_NAME,
+  name: 'v1.0.0',
+  body: 'Description of the release',
+  draft: false,
+  prerelease: false,
+  generate_release_notes: true
 })
 
 console.log(ret)
