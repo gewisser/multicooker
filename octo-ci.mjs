@@ -66,7 +66,7 @@ try {
     owner,
     repo,
     release_id: id,
-    name: 'test_asset.zip',
+    name: distFileVer,
     data: new Uint8Array(content),
   });
 
