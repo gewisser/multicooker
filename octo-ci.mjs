@@ -32,9 +32,9 @@ console.log(owner, repo);
 const ret = await octokit.repos.createRelease({
   owner,
   repo,
-  tag_name: 'v1.0.2',
+  tag_name: 'v1.0.3',
   target_commitish: process.env.GITHUB_REF_NAME,
-  name: 'v1.0.1',
+  name: 'v1.0.3',
   body: 'Description of the release',
   draft: false,
   prerelease: false,
