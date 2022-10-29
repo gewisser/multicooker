@@ -21,19 +21,19 @@ jobs:
         node-version: lts/*
         cache: 'npm'
 
-    - name: pre
-      run: npm ci
-
-    - name: Linting...
-      run: npm run lint
-
-    - name: Build...
-      run: npm run build:pwa:brotli
-
-    - name: Zip dist
-      uses: montudor/action-zip@v1
-      with:
-        args: zip -qq -r dist.zip dist
+#    - name: pre
+#      run: npm ci
+#
+#    - name: Linting...
+#      run: npm run lint
+#
+#    - name: Build...
+#      run: npm run build:pwa:brotli
+#
+#    - name: Zip dist
+#      uses: montudor/action-zip@v1
+#      with:
+#        args: zip -qq -r dist.zip dist
 
 
 
@@ -49,12 +49,12 @@ jobs:
 #         name: build-${{github.ref_name}}
 #         path: artifact
 
-    - name: Create release
-      uses: ncipollo/release-action@main
-      with:
-        artifacts: dist.zip
-        tag: ${{github.ref_name}}
-        generateReleaseNotes: true
-        replacesArtifacts: true
-        name: Release - ${{github.ref_name}}
-        token: ${{ secrets.GITHUB_TOKEN }}
+#    - name: Create release
+#      uses: ncipollo/release-action@main
+#      with:
+#        artifacts: dist.zip
+#        tag: ${{github.ref_name}}
+#        generateReleaseNotes: true
+#        replacesArtifacts: true
+#        name: Release - ${{github.ref_name}}
+#        token: ${{ secrets.GITHUB_TOKEN }}
