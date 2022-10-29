@@ -21,10 +21,12 @@ jobs:
         node-version: lts/*
         cache: 'npm'
 
+    - name: pre
+      run: npm ci
+    - name: Test
+      run: node octo-ci.mjs
 
-#    - name: pre
-#      run: npm ci
-#
+
 #    - name: Linting...
 #      run: npm run lint
 #
@@ -35,27 +37,26 @@ jobs:
 #      uses: montudor/action-zip@v1
 #      with:
 #        args: zip -qq -r dist.zip dist
-
-
-
-#     - name: Create artifact
-#       uses: actions/upload-artifact@v3
-#       with:
-#         name: build-${{ github.run_attempt }}
-#         path: dist
+#
+#    - name:  'Automated Version Bump'
+#      uses:  'phips28/gh-action-bump-version@master'
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag-prefix:  'v'
+#        version-type:  'minor'
+#
+#    - name:  'echo'
+#      env:
+#        NEW_TAG: ${{ steps.version_bump.outputs.newTag }}
+#      run: echo "new tag $NEW_TAG"
 
 #     - name: Create release
-#       uses: actions/download-artifact@v3
+#       uses: ncipollo/release-action@main
 #       with:
-#         name: build-${{github.ref_name}}
-#         path: artifact
-
-#    - name: Create release
-#      uses: ncipollo/release-action@main
-#      with:
-#        artifacts: dist.zip
-#        tag: ${{github.ref_name}}
-#        generateReleaseNotes: true
-#        replacesArtifacts: true
-#        name: Release - ${{github.ref_name}}
-#        token: ${{ secrets.GITHUB_TOKEN }}
+#         artifacts: dist.zip
+#         commit: ''
+#         generateReleaseNotes: true
+#         replacesArtifacts: true
+#         name: Release - ${{ steps.version-bump.outputs.newTag }}
+#         token: ${{ secrets.GITHUB_TOKEN }}
