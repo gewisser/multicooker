@@ -147,7 +147,7 @@ export default defineComponent({
       onClickBtn,
       defaultImg,
       fileInput,
-      onFileChange: onFileChange as unknown as Event, // typescript glitch
+      onFileChange,
       isUploading,
       imageDataRef,
     };
