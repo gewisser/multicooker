@@ -5,9 +5,8 @@
 </route>
 
 <template>
-  <q-page class="flex justify-evenly q-pa-lg form-page">
+  <q-page class="column q-pa-lg form-page">
     <q-card v-for="dish in dishList" class="my-card" :key="dish.id">
-      <!--      <q-img src="https://cdn.quasar.dev/img/chicken-salad.jpg" />-->
       <q-img
         :src="dish.imageData.homeImgUrl || image_placeholder"
         alt="Фото блюда"
@@ -33,12 +32,6 @@
 
         <div class="row no-wrap items-center">
           <div class="col text-h6 ellipsis">{{ dish.title }}</div>
-          <div
-            class="col-auto text-grey text-caption q-pt-md row no-wrap items-center"
-          >
-            <q-icon name="sym_o_place" />
-            250 ft
-          </div>
         </div>
 
         <q-rating
@@ -70,22 +63,22 @@
         </div>
         <q-btn
           v-if="dish.id !== clampId"
-          class="more-btn"
+          class="more-btn full-width"
           flat
           no-caps
           no-wrap
           color="primary"
           padding="0"
           @click="clampId = dish.id"
-          >далее</q-btn
+          >...</q-btn
         >
       </q-card-section>
 
       <q-separator />
 
-      <q-card-actions>
-        <q-btn flat round icon="sym_o_event" />
-        <q-btn flat color="primary"> Reserve </q-btn>
+      <q-card-actions class="q-pa-md">
+        <div class="text-caption">Время приготовления ≈</div>
+        <div>&nbsp;{{ formatDuration(dish.total_cooking_time) }}</div>
       </q-card-actions>
     </q-card>
   </q-page>
@@ -118,6 +111,7 @@
 import { defineComponent, ref } from 'vue';
 import { useDish } from 'stores/appStore';
 import { storeToRefs } from 'pinia';
+import { Duration } from 'luxon';
 
 import image_placeholder from 'src/assets/image_placeholder.svg';
 
@@ -137,6 +131,10 @@ export default defineComponent({
       });
     }
 
+    function formatDuration(second: number) {
+      return Duration.fromObject({ second }).toFormat('hh:mm');
+    }
+
     return {
       knobVal,
       stars,
@@ -144,6 +142,7 @@ export default defineComponent({
       image_placeholder,
       splitIngredients,
       clampId,
+      formatDuration,
     };
   },
 });

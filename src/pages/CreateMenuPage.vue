@@ -77,13 +77,16 @@
     <div class="column items-center group-set">
       <div class="column items-center">
         <div class="text-grey-6">Общее время приготовления</div>
-        <AppTimer v-model="dish.total_time" style="font-size: 16px" />
+        <AppTimer v-model="cooking.start_total_time" style="font-size: 16px" />
       </div>
       <div class="column items-center">
         <div class="text-grey-6 text-center">
           Время приготовления<br />от достижения заданной температуры
         </div>
-        <AppTimer v-model="cooking.cooking_time" style="font-size: 16px" />
+        <AppTimer
+          v-model="cooking.start_cooking_time"
+          style="font-size: 16px"
+        />
       </div>
     </div>
 
@@ -96,7 +99,7 @@
       style="row-gap: 20px"
     >
       <q-btn
-        v-if="dish.total_time === 0"
+        v-if="cooking.start_total_time === 0"
         padding="10px 16px"
         icon="sym_o_play_arrow"
         class="glossy"
@@ -106,7 +109,7 @@
         @click="startCooking"
       />
       <q-btn
-        v-if="cooking.cooking_time > 0"
+        v-if="cooking.start_cooking_time > 0"
         padding="10px 16px"
         icon="sym_o_stop_circle"
         class="glossy"
@@ -148,8 +151,6 @@ export default defineComponent({
 
     const { dish, cooking } = storeToRefs(dishStore);
 
-    let timerHandle: NodeJS.Timer;
-
     function onDeleteClick() {
       $q.dialog({
         title: 'Подтвердите',
@@ -160,28 +161,12 @@ export default defineComponent({
         dish.value.imageData.images.forEach((image) => {
           S3.Delete(image.fileName, import.meta.env.VITE_S3_IMG_DIR);
         });
-
         dishStore.newDish();
-        clearInterval(timerHandle);
       });
     }
 
     function startCooking() {
-      dish.value.total_time = Math.trunc(new Date().getTime() / 1000);
-      cooking.value.current_temperature = 20;
-
-      timerHandle = setInterval(() => {
-        cooking.value.current_temperature =
-          cooking.value.current_temperature + 5;
-
-        if (
-          cooking.value.current_temperature >= dish.value.cooking_temperature &&
-          cooking.value.cooking_time === 0
-        ) {
-          cooking.value.cooking_time = Math.trunc(new Date().getTime() / 1000);
-          clearInterval(timerHandle);
-        }
-      }, 700);
+      dishStore.startCooking();
     }
 
     function stopCooking() {
@@ -191,11 +176,7 @@ export default defineComponent({
         cancel: true,
         persistent: true,
       }).onOk(async () => {
-        dish.value.saved_cooking_time =
-          Math.trunc(new Date().getTime() / 1000) - cooking.value.cooking_time;
-
-        await dishStore.saveToDishList(dish.value);
-
+        await dishStore.saveNewDishToList();
         dishStore.newDish();
       });
     }
