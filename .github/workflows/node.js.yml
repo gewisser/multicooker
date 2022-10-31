@@ -37,11 +37,11 @@ jobs:
        PATH: "./dist/pwa"
        CLEAR: true
 
-    - name: Build brotli dist for ESP-32...
-      run: npm run build:pwa:brotli
+#     - name: Build brotli dist for ESP-32...
+#       run: npm run build:pwa:brotli
 
 
-    - name: Create release
-      run: node octo-ci.mjs
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Create release
+#       run: node octo-ci.mjs
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
