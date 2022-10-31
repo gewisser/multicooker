@@ -27,7 +27,17 @@ jobs:
     - name: Linting...
       run: npm run lint
 
-    - name: Build brotli dist...
+    - name: Build PWA for S3 and upload...
+      run: npm run build:pwa
+      uses: sergeevpasha/yandex-cloud-s3-sync-github-actions@v0.1.0
+      with:
+       YANDEX_CLOUD_ACCESS_KEY_ID: ${{ secrets.YANDEX_CLOUD_ACCESS_KEY_ID }}
+       YANDEX_CLOUD_SECRET_ACCESS_KEY: ${{ secrets.YANDEX_CLOUD_SECRET_ACCESS_KEY }}
+       YANDEX_CLOUD_BUCKET_NAME: ${{ secrets.YANDEX_CLOUD_BUCKET_NAME }}
+       PATH: "./dist"
+       CLEAR: true
+
+    - name: Build brotli dist for ESP-32...
       run: npm run build:pwa:brotli
 
 
@@ -35,40 +45,3 @@ jobs:
       run: node octo-ci.mjs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#    - name: Cpmpress dist
-#      run: tar -cvf filename.tar files/directories
-
-#    - name: Linting...
-#      run: npm run lint
-#
-#    - name: Build...
-#      run: npm run build:pwa:brotli
-#
-#    - name: Zip dist
-#      uses: montudor/action-zip@v1
-#      with:
-#        args: zip -qq -r dist.zip dist
-#
-#    - name:  'Automated Version Bump'
-#      uses:  'phips28/gh-action-bump-version@master'
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag-prefix:  'v'
-#        version-type:  'minor'
-#
-#    - name:  'echo'
-#      env:
-#        NEW_TAG: ${{ steps.version_bump.outputs.newTag }}
-#      run: echo "new tag $NEW_TAG"
-
-#     - name: Create release
-#       uses: ncipollo/release-action@main
-#       with:
-#         artifacts: dist.zip
-#         commit: ''
-#         generateReleaseNotes: true
-#         replacesArtifacts: true
-#         name: Release - ${{ steps.version-bump.outputs.newTag }}
-#         token: ${{ secrets.GITHUB_TOKEN }}

@@ -10,11 +10,13 @@ export interface IDish {
   auto_heating: boolean;
   cooking_temperature: number;
   auto_heating_temp: number;
-  total_time: number;
-  saved_cooking_time: number;
+  total_cooking_time: number;
+  heating_cooking_time: number;
 }
 
 export interface ICookingProcess {
+  id: string;
   current_temperature: number;
-  cooking_time: number;
+  start_cooking_time: number;
+  start_total_time: number;
 }

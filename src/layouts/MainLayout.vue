@@ -15,7 +15,7 @@
       <q-tabs align="justify">
         <q-route-tab
           class="round-top-focus"
-          :disable="dish.total_time > 0"
+          :disable="cooking.start_cooking_time > 0"
           icon="sym_o_menu_book"
           :to="{ name: 'IndexPage' }"
           label="Блюда"
@@ -28,7 +28,7 @@
         />
         <q-route-tab
           class="round-top-focus"
-          :disable="dish.total_time > 0"
+          :disable="cooking.start_cooking_time > 0"
           icon="sym_o_engineering"
           :to="{ name: 'ManualControlPage' }"
           label="я сам"
@@ -95,11 +95,11 @@ export default defineComponent({
     dishStore.getDishList().then();
 
     const stauses = computed(() => {
-      if (cooking.value.cooking_time > 0) {
+      if (cooking.value.start_cooking_time > 0) {
         return 'Приготовление...';
       }
 
-      if (dish.value.total_time > 0) {
+      if (cooking.value.start_total_time > 0) {
         return 'Нагрев мультиварки...';
       }
 
