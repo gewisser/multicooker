@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev",
+    "dev:pwa": "quasar dev -m pwa",
     "build": "quasar build",
     "build:pwa": "quasar build -m pwa",
     "build:pwa:brotli": "cross-env BROTLI=1 quasar build -m pwa",
