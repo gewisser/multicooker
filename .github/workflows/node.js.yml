@@ -29,7 +29,8 @@ jobs:
 
     - name: Build PWA for S3 and upload...
       run: npm run build:pwa
-    - uses: gewisser/yandex-cloud-s3-sync-github-actions@v.1.1
+
+    - uses: sergeevpasha/yandex-cloud-s3-sync-github-actions@v0.1.0
       with:
        YANDEX_CLOUD_ACCESS_KEY_ID: ${{ secrets.YANDEX_CLOUD_ACCESS_KEY_ID }}
        YANDEX_CLOUD_SECRET_ACCESS_KEY: ${{ secrets.YANDEX_CLOUD_SECRET_ACCESS_KEY }}
@@ -37,11 +38,10 @@ jobs:
        PATH: "./dist/pwa"
        CLEAR: true
 
-#     - name: Build brotli dist for ESP-32...
-#       run: npm run build:pwa:brotli
+    - name: Build brotli dist for ESP-32...
+      run: npm run build:pwa:brotli
 
-
-#     - name: Create release
-#       run: node octo-ci.mjs
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create release
+      run: node octo-ci.mjs
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
