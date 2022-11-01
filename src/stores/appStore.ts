@@ -64,15 +64,7 @@ export const useDish = defineStore('dish', () => {
     } catch (e) {}
   }
 
-  async function saveNewDishToList() {
-    const eTime = Math.trunc(new Date().getTime() / 1000);
-
-    dish.value.total_cooking_time = eTime - cooking.start_total_time;
-
-    dish.value.heating_cooking_time = eTime - cooking.start_cooking_time;
-
-    dishList.value.push(dish.value);
-
+  async function saveDishList() {
     await S3.Upload(
       {
         file: Uint8Array.from(
@@ -83,6 +75,18 @@ export const useDish = defineStore('dish', () => {
       },
       '/'
     );
+  }
+
+  async function saveNewDishToList() {
+    const eTime = Math.trunc(new Date().getTime() / 1000);
+
+    dish.value.total_cooking_time = eTime - cooking.start_total_time;
+
+    dish.value.heating_cooking_time = eTime - cooking.start_cooking_time;
+
+    dishList.value.push(dish.value);
+
+    await saveDishList();
   }
 
   function startCooking() {
@@ -110,5 +114,6 @@ export const useDish = defineStore('dish', () => {
     getDishList,
     saveNewDishToList,
     startCooking,
+    saveDishList,
   };
 });

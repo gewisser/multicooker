@@ -19,11 +19,12 @@
             />
           </template>
           <template v-else>
-            <q-img
+            <ImagePreviewer
               v-for="image in imageDataRef.images"
               :key="image.url"
               class="q-mb-sm img-gallery"
               :src="image.url"
+              :img-high-guality="image.url"
               :ratio="16 / 9"
               placeholder-src="~assets/image_placeholder.svg"
             >
@@ -45,7 +46,7 @@
                   label="На главной"
                 />
               </div>
-            </q-img>
+            </ImagePreviewer>
           </template>
         </div>
       </q-card-section>
@@ -89,14 +90,13 @@ import { getFileData } from 'src/utils/files';
 import useS3 from 'src/composables/useS3';
 import { readImage } from 'src/utils/images';
 import type { IImageData } from 'src/models/Gallery';
+import ImagePreviewer from 'components/ImagePreviewer.vue';
 
 export default defineComponent({
   name: 'ImgUploader',
+  components: { ImagePreviewer },
+
   props: {
-    fullWidth: {
-      type: Boolean,
-      default: false,
-    },
     imageData: {
       type: Object as PropType<IImageData>,
       required: true,

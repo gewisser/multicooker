@@ -31,53 +31,36 @@ const awss3 = () => {
     region: import.meta.env.VITE_S3_REGION,
   });
 
-  function Upload(data: IFileData, route: string) {
-    return new Promise<string>((resolve, reject) => {
-      if (!data || !data.file) {
-        reject('Data or file undef');
-        return;
-      }
+  async function Upload(data: IFileData, route: string) {
+    if (!data || !data.file) {
+      throw new Error('Data or file undef');
+    }
 
-      const uploadRoute = getRoute(route);
-      const Key = `${uploadRoute}${data.fileName}`;
+    const uploadRoute = getRoute(route);
+    const Key = `${uploadRoute}${data.fileName}`;
 
-      let params: IPutObject | undefined = {
-        Bucket: s3Bucket,
-        Key,
-        Body: data.file,
-        ContentType: data.contentType,
-      };
+    const params: IPutObject | undefined = {
+      Bucket: s3Bucket,
+      Key,
+      Body: data.file,
+      ContentType: data.contentType,
+    };
 
-      s3.putObject(params, (err: any) => {
-        params = undefined;
+    await s3.putObject(params);
 
-        if (err) {
-          reject(err);
-        }
-
-        resolve(`${endpointUrl}/${s3Bucket}${route}${data.fileName}`);
-      });
-    });
+    return `${endpointUrl}/${s3Bucket}${route}${data.fileName}`;
   }
 
-  function Delete(fileName: string, route: string) {
-    return new Promise((resolve, reject) => {
-      const uploadRoute = getRoute(route);
-      const Key = `${uploadRoute}${fileName}`;
+  async function Delete(fileName: string, route: string) {
+    const uploadRoute = getRoute(route);
+    const Key = `${uploadRoute}${fileName}`;
 
-      const params = {
-        Bucket: s3Bucket,
-        Key: Key,
-      };
+    const params = {
+      Bucket: s3Bucket,
+      Key: Key,
+    };
 
-      s3.deleteObject(params, (err: any) => {
-        if (err) {
-          reject(err);
-        }
-
-        reject();
-      });
-    });
+    await s3.deleteObject(params);
   }
 
   return {

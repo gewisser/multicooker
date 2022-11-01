@@ -7,11 +7,12 @@
 <template>
   <q-page class="column q-pa-lg form-page">
     <q-card v-for="dish in dishList" class="my-card" :key="dish.id">
-      <q-img
+      <ImagePreviewer
         :src="dish.imageData.homeImgUrl || image_placeholder"
+        :img-high-guality="dish.imageData.homeImgUrl || image_placeholder"
         alt="Фото блюда"
         :ratio="16 / 9"
-        placeholder-src="~assets/image_placeholder.svg"
+        :placeholder-src="image_placeholder"
       >
         <template v-slot:error>
           <div class="absolute-full column flex-center bg-negative text-white">
@@ -19,13 +20,15 @@
             <q-icon name="sym_o_mood_bad" size="48px"></q-icon>
           </div>
         </template>
-      </q-img>
+      </ImagePreviewer>
 
       <q-card-section>
         <q-btn
-          fab
+          rounded
+          size="lg"
+          padding="8px"
           color="deep-orange"
-          icon="sym_o_cooking"
+          icon="sym_o_play_pause"
           class="absolute"
           style="top: 0; right: 12px; transform: translateY(-50%)"
         />
@@ -36,6 +39,7 @@
 
         <q-rating
           v-model="dish.stars"
+          @update:model-value="onRatingChange"
           :max="5"
           size="32px"
           icon="sym_o_grade"
@@ -76,9 +80,10 @@
 
       <q-separator />
 
-      <q-card-actions class="q-pa-md">
-        <div class="text-caption">Время приготовления ≈</div>
-        <div>&nbsp;{{ formatDuration(dish.total_cooking_time) }}</div>
+      <q-card-actions class="q-pa-md text-block-space">
+        <div class="text-caption">Время приготовления</div>
+        <div class="text-caption">≈</div>
+        <div>{{ formatDuration(dish.total_cooking_time) }}</div>
       </q-card-actions>
     </q-card>
   </q-page>
@@ -112,11 +117,14 @@ import { defineComponent, ref } from 'vue';
 import { useDish } from 'stores/appStore';
 import { storeToRefs } from 'pinia';
 import { Duration } from 'luxon';
+import { debounce } from 'quasar';
 
 import image_placeholder from 'src/assets/image_placeholder.svg';
+import ImagePreviewer from 'components/ImagePreviewer.vue';
 
 export default defineComponent({
   name: 'IndexPage',
+  components: { ImagePreviewer },
   setup() {
     const dishStore = useDish();
     const { dishList } = storeToRefs(dishStore);
@@ -135,6 +143,10 @@ export default defineComponent({
       return Duration.fromObject({ second }).toFormat('hh:mm');
     }
 
+    const onRatingChange = debounce(() => {
+      dishStore.saveDishList();
+    }, 4000);
+
     return {
       knobVal,
       stars,
@@ -143,6 +155,7 @@ export default defineComponent({
       splitIngredients,
       clampId,
       formatDuration,
+      onRatingChange,
     };
   },
 });
