@@ -5,7 +5,7 @@
 </route>
 
 <template>
-  <q-page class="column q-pa-lg form-page">
+  <q-page class="column q-pa-lg form-page no-wrap">
     <q-card v-for="dish in dishList" class="my-card" :key="dish.id">
       <ImagePreviewer
         :src="dish.imageData.homeImgUrl || image_placeholder"
@@ -81,9 +81,11 @@
       <q-separator />
 
       <q-card-actions class="q-pa-md text-block-space">
-        <div class="text-caption">Время приготовления</div>
-        <div class="text-caption">≈</div>
-        <div>{{ formatDuration(dish.total_cooking_time) }}</div>
+        <div class="text-caption col-auto">Время приготовления</div>
+        <div class="text-caption col-auto">≈</div>
+        <div class="col-auto">
+          {{ formatDuration(dish.total_cooking_time) }}
+        </div>
       </q-card-actions>
     </q-card>
   </q-page>
