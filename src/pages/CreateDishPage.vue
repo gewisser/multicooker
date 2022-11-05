@@ -32,9 +32,7 @@
     <q-separator inset />
 
     <div class="column items-center group-set">
-      <div class="text-subtitle1 text-grey-6">
-        Установите температуру приготовления
-      </div>
+      <div class="text-subtitle1 text-grey-6">Установите T° приготовления</div>
       <q-knob
         :step="1"
         v-model="dish.cooking_temperature"
@@ -51,11 +49,9 @@
     <q-separator inset />
 
     <div class="column group-set">
-      <q-toggle
-        size="48px"
-        v-model="dish.auto_heating"
-        label="Установить температуру подогрева?"
-      />
+      <q-toggle size="48px" v-model="dish.auto_heating">
+        <span class="text-subtitle1 text-grey-6">Установить T° подогрева?</span>
+      </q-toggle>
 
       <div v-if="dish.auto_heating" class="column items-center">
         <q-knob
@@ -89,8 +85,6 @@
         />
       </div>
     </div>
-
-    <q-separator inset />
 
     <q-card-actions
       class="q-px-none"
@@ -142,7 +136,7 @@ import { useDish } from 'stores/appStore';
 import { storeToRefs } from 'pinia';
 
 export default defineComponent({
-  name: 'CreateMenuPage',
+  name: 'CreateDishPage',
   components: { AppTimer, GalleryImg },
   setup() {
     const $q = useQuasar();
@@ -166,7 +160,7 @@ export default defineComponent({
     }
 
     function startCooking() {
-      dishStore.startCooking();
+      dishStore.startCooking(dish.value);
     }
 
     function stopCooking() {

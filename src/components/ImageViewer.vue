@@ -1,5 +1,5 @@
 <template>
-  <q-dialog maximized>
+  <q-dialog class="image-viewer" maximized>
     <div class="col-auto full-width">
       <q-img
         :src="img"

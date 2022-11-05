@@ -37,13 +37,24 @@
                 </div>
               </template>
 
-              <div class="absolute-bottom q-pa-none-important">
+              <div
+                class="row items-center justify-between absolute-bottom q-pa-none-important"
+              >
                 <q-radio
                   dark
                   size="lg"
                   v-model="defaultImg"
                   :val="image.url"
                   label="На главной"
+                />
+                <q-btn
+                  class="q-mr-md"
+                  round
+                  color="red-5"
+                  size="sm"
+                  icon="sym_o_delete_forever"
+                  @click.stop="deleteImage(image)"
+                  text-color="red-2"
                 />
               </div>
             </ImagePreviewer>
@@ -91,6 +102,8 @@ import useS3 from 'src/composables/useS3';
 import { readImage } from 'src/utils/images';
 import type { IImageData } from 'src/models/Gallery';
 import ImagePreviewer from 'components/ImagePreviewer.vue';
+import { useQuasar } from 'quasar';
+import { IImageList } from 'src/models/Gallery';
 
 export default defineComponent({
   name: 'ImgUploader',
@@ -106,6 +119,8 @@ export default defineComponent({
     'update:imageData': (_data: IImageData) => true,
   },
   setup(props, { emit }) {
+    const $q = useQuasar();
+
     const imageDataRef = toRef(props, 'imageData');
     const defaultImg = toRef(props.imageData, 'homeImgUrl');
 
@@ -143,6 +158,27 @@ export default defineComponent({
       isUploading.value = false;
     }
 
+    async function deleteImage(image: IImageList) {
+      $q.dialog({
+        title: 'Подтвердите удаление',
+        message: 'Вы действительно хотите удалить это изображение?',
+        cancel: true,
+        persistent: true,
+      }).onOk(async () => {
+        await S3.Delete(image.fileName, import.meta.env.VITE_S3_IMG_DIR);
+
+        const index = imageDataRef.value.images.findIndex(
+          (imageItem) => imageItem.fileName === image.fileName
+        );
+
+        if (index === -1) {
+          return;
+        }
+
+        imageDataRef.value.images.splice(index, 1);
+      });
+    }
+
     return {
       onClickBtn,
       defaultImg,
@@ -150,6 +186,7 @@ export default defineComponent({
       onFileChange,
       isUploading,
       imageDataRef,
+      deleteImage,
     };
   },
 });

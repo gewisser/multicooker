@@ -1,0 +1,9 @@
+.ingredient-list > .ingredient-list-item {
+  &:before {
+    content: '•';
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  text-transform: capitalize;
+}

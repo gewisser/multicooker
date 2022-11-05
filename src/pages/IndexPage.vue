@@ -31,10 +31,11 @@
           icon="sym_o_play_pause"
           class="absolute"
           style="top: 0; right: 12px; transform: translateY(-50%)"
+          @click.stop="applyDish(dish)"
         />
 
         <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis">{{ dish.title }}</div>
+          <div class="col text-h5 ellipsis">{{ dish.title }}</div>
         </div>
 
         <q-rating
@@ -48,7 +49,7 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <div class="text-subtitle1 row items-center ingredient-list">
+        <div class="text-subtitle2 row items-center ingredient-list">
           <q-icon name="sym_o_production_quantity_limits" size="18px" />
           <div
             class="ingredient-list-item"
@@ -59,7 +60,7 @@
           </div>
         </div>
         <div
-          class="text-caption text-grey-7 q-mt-md"
+          class="text-body2 text-grey-7 q-mt-md"
           :class="{ 'clamp-description': dish.id !== clampId }"
           style="white-space: pre-line"
         >
@@ -92,16 +93,6 @@
 </template>
 
 <style scoped lang="scss">
-.ingredient-list > .ingredient-list-item {
-  &:before {
-    content: '•';
-    padding-right: 5px;
-    padding-left: 5px;
-  }
-
-  text-transform: capitalize;
-}
-
 .clamp-description {
   overflow: hidden;
   display: -webkit-box;
@@ -120,26 +111,25 @@ import { useDish } from 'stores/appStore';
 import { storeToRefs } from 'pinia';
 import { Duration } from 'luxon';
 import { debounce } from 'quasar';
+import { useRouter } from 'vue-router';
 
 import image_placeholder from 'src/assets/image_placeholder.svg';
 import ImagePreviewer from 'components/ImagePreviewer.vue';
+import { IDish } from 'src/models/Dish';
+import { splitIngredients } from 'src/utils/dish';
 
 export default defineComponent({
   name: 'IndexPage',
   components: { ImagePreviewer },
   setup() {
     const dishStore = useDish();
-    const { dishList } = storeToRefs(dishStore);
+    const router = useRouter();
+
+    const { dishList, cooking } = storeToRefs(dishStore);
 
     const knobVal = ref(0);
     const stars = ref(0);
     const clampId = ref('');
-
-    function splitIngredients(ingredients: string) {
-      return ingredients.split(',').map((ingredient) => {
-        return ingredient.trim();
-      });
-    }
 
     function formatDuration(second: number) {
       return Duration.fromObject({ second }).toFormat('hh:mm');
@@ -148,6 +138,11 @@ export default defineComponent({
     const onRatingChange = debounce(() => {
       dishStore.saveDishList();
     }, 4000);
+
+    function applyDish(dish: IDish) {
+      cooking.value.id = dish.id;
+      router.push({ name: 'СookingProcessPage' }).then();
+    }
 
     return {
       knobVal,
@@ -158,6 +153,7 @@ export default defineComponent({
       clampId,
       formatDuration,
       onRatingChange,
+      applyDish,
     };
   },
 });

@@ -1,4 +1,11 @@
 .img-gallery {
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid var(--q-bg);
+}
+
+.image-viewer {
+  .q-dialog__backdrop {
+    background: rgb(0 0 0 / 63%);
+    backdrop-filter: blur(8px);
+  }
 }

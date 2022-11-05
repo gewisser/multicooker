@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ICookingProcess, IDish } from 'src/models/Dish';
 import { useLocalStorage } from '@vueuse/core';
 import { nanoid } from 'nanoid';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { api } from 'boot/axios';
 import useS3 from 'src/composables/useS3';
 
@@ -16,6 +16,12 @@ export const useDish = defineStore('dish', () => {
   const S3 = useS3();
 
   let timerHandle: NodeJS.Timer;
+
+  const currentDishProcess = computed(() => {
+    return (
+      dishList.value.find((dish) => dish.id === cooking.id) || newDishData()
+    );
+  });
 
   function newCookingProcessData(id: string): ICookingProcess {
     return {
@@ -89,9 +95,14 @@ export const useDish = defineStore('dish', () => {
     await saveDishList();
   }
 
-  function startCooking() {
+  function startCooking(applyDish: IDish | undefined) {
+    if (!applyDish) {
+      return;
+    }
+
     cooking.start_total_time = Math.trunc(new Date().getTime() / 1000);
     cooking.current_temperature = 20;
+    cooking.id = applyDish.id;
 
     timerHandle = setInterval(() => {
       cooking.current_temperature = cooking.current_temperature + 5;
@@ -115,5 +126,6 @@ export const useDish = defineStore('dish', () => {
     saveNewDishToList,
     startCooking,
     saveDishList,
+    currentDishProcess,
   };
 });

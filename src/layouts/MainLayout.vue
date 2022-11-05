@@ -23,7 +23,7 @@
         <q-route-tab
           class="round-top-focus"
           icon="sym_o_assignment_add"
-          :to="{ name: 'CreateMenuPage' }"
+          :to="{ name: 'CreateDishPage' }"
           label="Создать"
         />
         <q-route-tab
