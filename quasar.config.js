@@ -8,7 +8,7 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const isBrotliCompress = process.env.BROTLI === '1';
+const isGzipCompress = process.env.GZIP === '1';
 
 const { configure } = require('quasar/wrappers');
 const zlib = require('zlib');
@@ -53,7 +53,8 @@ module.exports = configure(function (ctx) {
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
       async afterBuild() {
-        if (!isBrotliCompress) {
+        /*
+        if (!isGzipCompress) {
           return;
         }
 
@@ -76,17 +77,18 @@ module.exports = configure(function (ctx) {
           const cname = getOutputFileName(compressedFile, '.gz');
 
           await fs.writeFileSync(cname, content);
-        }
+        }*/
       },
 
       vitePlugins: [
         [
           'vite-plugin-compression',
           {
+            filter: /\.(js|mjs|json|css|svg)$/i,
             deleteOriginFile: true,
             algorithm: 'gzip',
             threshold: 500,
-            disable: !isBrotliCompress,
+            disable: !isGzipCompress,
           },
         ],
         [
@@ -100,7 +102,6 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      https: true,
       open: false, // opens browser window automatically
     },
 

@@ -10,7 +10,7 @@ const FS_NAME = FS_IS_LITTLEFS ? 'littlefs' : 'spiffs'
 console.log(`Start create ${FS_NAME}.`)
 
 const processCwd = process.cwd()
-const distPath = path.resolve(processCwd, 'dist', 'pwa')
+const distPath = path.resolve(processCwd, 'dist', 'spa')
 const binFile = path.resolve(processCwd, `image-${FS_NAME}.bin`)
 
 const MKFS_TOOL = FS_IS_LITTLEFS ? process.env.MKLITTLEFS_PATH : process.env.MKSPIFFS_PATH
