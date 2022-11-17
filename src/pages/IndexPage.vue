@@ -141,7 +141,7 @@ export default defineComponent({
 
     function applyDish(dish: IDish) {
       cooking.value.id = dish.id;
-      router.push({ name: 'СookingProcessPage' }).then();
+      router.push({ name: 'CookProcPg' }).then();
     }
 
     return {

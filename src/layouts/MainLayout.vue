@@ -30,7 +30,7 @@
           class="round-top-focus"
           :disable="cooking.start_cooking_time > 0"
           icon="sym_o_engineering"
-          :to="{ name: 'ManualControlPage' }"
+          :to="{ name: 'ManualCtrlPg' }"
           label="я сам"
         />
       </q-tabs>
@@ -90,17 +90,16 @@ export default defineComponent({
   setup() {
     const leftDrawerOpen = ref(false);
     const dishStore = useDish();
-    const { dish, cooking } = storeToRefs(dishStore);
+    const { dish, cooking, dishStatus } = storeToRefs(dishStore);
 
     dishStore.getDishList().then();
 
     const stauses = computed(() => {
-      if (cooking.value.start_cooking_time > 0) {
-        return 'Приготовление...';
-      }
-
-      if (cooking.value.start_total_time > 0) {
-        return 'Нагрев мультиварки...';
+      switch (dishStatus.value) {
+        case 'cooking':
+          return 'Приготовление...';
+        case 'heat':
+          return 'Нагрев мультиварки...';
       }
 
       return 'В ожидани';

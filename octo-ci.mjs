@@ -1,6 +1,7 @@
 import { Octokit } from "@octokit/action";
 import fs from 'fs'
 import { execSync } from "child_process"
+import { execFilePromise } from './node.utils.mjs'
 
 
 const octokit = new Octokit();
@@ -36,7 +37,7 @@ const distFileVer = `dist.${newVersion}.tar.bz2`
 console.log(`New version: ${newVersion}`)
 console.log('==============================================')
 console.log(`Create arch ${distFileVer}...`)
-execSync(`tar -zcf ${distFileVer} dist`)
+await execFilePromise('tar', '-zcf ${distFileVer} dist'.split(' '))
 console.log(`OK.`)
 console.log('==============================================')
 console.log(`Create new release: ${newVersion}...`)

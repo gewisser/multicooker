@@ -77,6 +77,8 @@ module.exports = {
 
     // in plain CommonJS modules, you can't use `import foo = require('foo')` to pass this rule, so it has to be disabled
     '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-empty-interface': 'error',
+    '@typescript-eslint/no-duplicate-imports': 'error',
 
     // The core 'no-unused-vars' rules (in the eslint:recommended ruleset)
     // does not work with type definitions

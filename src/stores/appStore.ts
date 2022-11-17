@@ -1,10 +1,16 @@
 import { defineStore } from 'pinia';
-import { ICookingProcess, IDish } from 'src/models/Dish';
+import type {
+  ICookingProcess,
+  IDish,
+  TDishStatus,
+  TDishSources,
+} from 'src/models/Dish';
 import { useLocalStorage } from '@vueuse/core';
 import { nanoid } from 'nanoid';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { api } from 'boot/axios';
 import useS3 from 'src/composables/useS3';
+import { debounce } from 'quasar';
 
 const NEW_DISH_KEY = 'new-dish';
 const VITE_S3_DISH_LIST = import.meta.env.VITE_S3_DISH_LIST;
@@ -18,10 +24,38 @@ export const useDish = defineStore('dish', () => {
   let timerHandle: NodeJS.Timer;
 
   const currentDishProcess = computed(() => {
-    return (
-      dishList.value.find((dish) => dish.id === cooking.id) || newDishData()
-    );
+    return dishList.value.find((dish) => dish.id === cooking.id) || dish.value;
   });
+
+  const dishStatus = computed<TDishStatus>(() => {
+    if (cooking.start_cooking_time > 0) {
+      return 'cooking';
+    }
+
+    if (cooking.start_total_time > 0) {
+      return 'heat';
+    }
+
+    return 'waiting';
+  });
+
+  const dishSources = computed<TDishSources>(() => {
+    if (currentDishProcess.value.id !== dish.value.id) {
+      return 'saved_dish';
+    }
+
+    return 'new_dish';
+  });
+
+  const sendProgramToESPDeb = debounce(sendProgramToESP, 700);
+
+  watch(cooking, (value) => {
+    sendProgramToESPDeb(value);
+  });
+
+  function sendProgramToESP(data: ICookingProcess) {
+    console.log('sent to ESP-32', data);
+  }
 
   function newCookingProcessData(id: string): ICookingProcess {
     return {
@@ -29,6 +63,9 @@ export const useDish = defineStore('dish', () => {
       current_temperature: 20,
       start_cooking_time: 0,
       start_total_time: 0,
+      auto_heating: true,
+      auto_heating_temp: 40,
+      cooking_temperature: 100,
     };
   }
 
@@ -55,7 +92,11 @@ export const useDish = defineStore('dish', () => {
     clearInterval(timerHandle);
 
     dish.value = newDishData();
-    Object.assign(cooking, newCookingProcessData(dish.value.id));
+    resetCookingProcessData(dish);
+  }
+
+  function resetCookingProcessData(dishData = dish) {
+    Object.assign(cooking, newCookingProcessData(dishData.value.id));
   }
 
   async function getDishList() {
@@ -100,9 +141,15 @@ export const useDish = defineStore('dish', () => {
       return;
     }
 
+    cooking.id = applyDish.id;
     cooking.start_total_time = Math.trunc(new Date().getTime() / 1000);
     cooking.current_temperature = 20;
-    cooking.id = applyDish.id;
+    cooking.auto_heating = applyDish.auto_heating;
+    cooking.auto_heating_temp = applyDish.auto_heating_temp;
+    cooking.cooking_temperature = applyDish.cooking_temperature;
+
+    // sent cooking obj to ESP-32
+    sendProgramToESP(cooking);
 
     timerHandle = setInterval(() => {
       cooking.current_temperature = cooking.current_temperature + 5;
@@ -127,5 +174,8 @@ export const useDish = defineStore('dish', () => {
     startCooking,
     saveDishList,
     currentDishProcess,
+    dishStatus,
+    dishSources,
+    resetCookingProcessData,
   };
 });

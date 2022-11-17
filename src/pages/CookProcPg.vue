@@ -1,8 +1,10 @@
 <template>
-  <q-page class="column q-pa-lg" style="gap: 0.8rem">
+  <q-page class="column q-pa-lg" style="gap: 1.4rem">
     <div class="text-h5 text-center">{{ currentDishProcess.title }}</div>
     <GalleryImg :image-data="currentDishProcess.imageData" />
-    <div class="text-subtitle2 row items-center justify-center ingredient-list">
+    <div
+      class="text-body1 text-weight-bolder row items-center justify-center ingredient-list"
+    >
       <q-icon name="sym_o_production_quantity_limits" size="18px" />
       <div
         class="ingredient-list-item"
@@ -13,7 +15,7 @@
       </div>
     </div>
     <div
-      class="text-body2 text-grey-7"
+      class="text-body1 text-grey-7"
       style="white-space: pre-line; text-align: justify"
     >
       {{ currentDishProcess.description }}
@@ -21,51 +23,13 @@
 
     <q-separator inset />
 
-    <div class="row items-center" style="margin-top: -1rem">
-      <div class="col-6 flex justify-center">
-        <div class="text-subtitle1 text-grey-6">T° приготовления</div>
-      </div>
-      <div class="col-6 flex justify-center">
-        <q-toggle
-          keep-color
-          dense
-          size="38px"
-          v-model="currentDishProcess.auto_heating"
-        >
-          <span class="text-subtitle1 text-grey-6">T° подогрева</span>
-        </q-toggle>
-      </div>
-    </div>
-
-    <div class="row items-center" style="margin-top: -1rem">
-      <div class="col-6 flex justify-center">
-        <q-knob
-          :step="1"
-          v-model="currentDishProcess.cooking_temperature"
-          show-value
-          size="120px"
-          :max="300"
-          :thickness="0.22"
-          color="deep-orange"
-          track-color="deep-orange-3"
-          class="text-orange"
-        />
-      </div>
-      <div class="col-6 flex justify-center">
-        <q-knob
-          :step="1"
-          v-model="currentDishProcess.auto_heating_temp"
-          show-value
-          size="80px"
-          :max="70"
-          :thickness="0.22"
-          color="orange"
-          track-color="orange-3"
-          :disable="!currentDishProcess.auto_heating"
-          class="text-orange"
-        />
-      </div>
-    </div>
+    <TempSettingControls
+      :cooking-data="{
+        cooking_temperature: toRef(cooking, 'cooking_temperature'),
+        auto_heating: toRef(cooking, 'auto_heating'),
+        auto_heating_temp: toRef(cooking, 'auto_heating_temp'),
+      }"
+    />
 
     <q-separator inset />
 
@@ -102,7 +66,7 @@
         @click="startCooking"
       />
       <q-btn
-        v-if="cooking.start_cooking_time > 0"
+        v-else
         padding="10px 16px"
         icon="sym_o_stop_circle"
         class="glossy"
@@ -126,18 +90,20 @@
 <style scoped></style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-//import type { IDish } from 'src/models/Dish';
+import { defineComponent, toRef } from 'vue';
 import GalleryImg from 'components/GalleryImg.vue';
 import { useDish } from 'stores/appStore';
 import { storeToRefs } from 'pinia';
 import { splitIngredients } from 'src/utils/dish';
 import AppTimer from 'components/AppTimer.vue';
 import { useQuasar } from 'quasar';
+import TempSettingControls from 'components/TSetCtrls.vue';
+import { onBeforeRouteLeave } from 'vue-router';
 
 export default defineComponent({
-  name: 'СookingProcessPage',
+  name: 'CookingProcessPage',
   components: {
+    TempSettingControls,
     GalleryImg,
     AppTimer,
   },
@@ -168,6 +134,12 @@ export default defineComponent({
       });
     }
 
+    onBeforeRouteLeave(() => {
+      dishStore.resetCookingProcessData();
+
+      return true;
+    });
+
     return {
       currentDishProcess,
       splitIngredients,
@@ -175,6 +147,7 @@ export default defineComponent({
       startCooking,
       stopCooking,
       onDeleteClick,
+      toRef,
     };
   },
 });

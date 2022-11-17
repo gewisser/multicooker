@@ -19,4 +19,10 @@ export interface ICookingProcess {
   current_temperature: number;
   start_cooking_time: number;
   start_total_time: number;
+  auto_heating: boolean;
+  cooking_temperature: number;
+  auto_heating_temp: number;
 }
+
+export type TDishStatus = 'waiting' | 'cooking' | 'heat';
+export type TDishSources = 'saved_dish' | 'new_dish';

@@ -72,8 +72,8 @@ module.exports = configure(function (ctx) {
           let content = fs.readFileSync(compressedFile);
           fs.unlinkSync(compressedFile);
 
-          content = await compress(content, 'brotliCompress');
-          const cname = getOutputFileName(compressedFile, '.br');
+          content = await compress(content, 'gzip');
+          const cname = getOutputFileName(compressedFile, '.gz');
 
           await fs.writeFileSync(cname, content);
         }
@@ -84,7 +84,7 @@ module.exports = configure(function (ctx) {
           'vite-plugin-compression',
           {
             deleteOriginFile: true,
-            algorithm: 'brotliCompress',
+            algorithm: 'gzip',
             threshold: 500,
             disable: !isBrotliCompress,
           },
@@ -100,7 +100,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      // https: true
+      https: true,
       open: false, // opens browser window automatically
     },
 
@@ -119,7 +119,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog'],
+      plugins: ['Dialog', 'Notify'],
       lang: 'ru',
     },
 
