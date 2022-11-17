@@ -36,7 +36,7 @@ const distFileVer = `dist.${newVersion}.tar.bz2`
 console.log(`New version: ${newVersion}`)
 console.log('==============================================')
 console.log(`Create arch ${distFileVer}...`)
-await execFilePromise('tar', '-zcf ${distFileVer} dist'.split(' '))
+await execFilePromise('tar', `-zcf ${distFileVer} dist`.split(' '))
 console.log(`OK.`)
 console.log('==============================================')
 console.log(`Create new release: ${newVersion}...`)
