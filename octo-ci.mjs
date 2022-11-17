@@ -1,6 +1,5 @@
 import { Octokit } from "@octokit/action";
 import fs from 'fs'
-import { execSync } from "child_process"
 import { execFilePromise } from './node.utils.mjs'
 
 

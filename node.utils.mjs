@@ -1,7 +1,7 @@
 import { execFile } from 'child_process';
 
 export function execFilePromise(...args) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const child = execFile(...args);
 
     child.on('close', (code) => {
