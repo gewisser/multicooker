@@ -11,23 +11,23 @@
 const isGzipCompress = process.env.GZIP === '1';
 
 const { configure } = require('quasar/wrappers');
-const zlib = require('zlib');
-const path = require('path');
+// const zlib = require('zlib');
+//const path = require('path');
 
-function compress(content, algorithm, options = {}) {
-  return new Promise((resolve, reject) => {
-    zlib[algorithm](content, options, (err, result) =>
-      err ? reject(err) : resolve(result)
-    );
-  });
-}
+// function compress(content, algorithm, options = {}) {
+//   return new Promise((resolve, reject) => {
+//     zlib[algorithm](content, options, (err, result) =>
+//       err ? reject(err) : resolve(result)
+//     );
+//   });
+// }
+//
+// function getOutputFileName(filepath, ext) {
+//   const compressExt = ext.startsWith('.') ? ext : `.${ext}`;
+//   return `${filepath}${compressExt}`;
+// }
 
-function getOutputFileName(filepath, ext) {
-  const compressExt = ext.startsWith('.') ? ext : `.${ext}`;
-  return `${filepath}${compressExt}`;
-}
-
-module.exports = configure(function (ctx) {
+module.exports = configure(function (/* ctx */) {
   return {
     eslint: {
       // fix: true,
