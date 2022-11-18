@@ -64,7 +64,7 @@
       <q-btn
         v-if="cooking.start_total_time === 0"
         padding="10px 16px"
-        icon="sym_o_play_arrow"
+        icon="app:play_arrow"
         class="glossy"
         rounded
         color="deep-orange"
@@ -74,7 +74,7 @@
       <q-btn
         v-if="cooking.start_cooking_time > 0"
         padding="10px 16px"
-        icon="sym_o_stop_circle"
+        icon="app:stop_circle"
         class="glossy"
         rounded
         color="green"
@@ -82,7 +82,7 @@
         @click="stopCooking"
       />
       <q-btn
-        icon="sym_o_delete_forever"
+        icon="app:delete_forever"
         flat
         label="Удалить"
         color="deep-orange"

@@ -5,7 +5,7 @@
     <div
       class="text-body1 text-weight-bolder row items-center justify-center ingredient-list"
     >
-      <q-icon name="sym_o_production_quantity_limits" size="18px" />
+      <q-icon name="app:production_quantity_limits" size="18px" />
       <div
         class="ingredient-list-item"
         v-for="ingredient in splitIngredients(currentDishProcess.ingredients)"
@@ -58,7 +58,7 @@
       <q-btn
         v-if="cooking.start_total_time === 0"
         padding="10px 16px"
-        icon="sym_o_play_arrow"
+        icon="app:play_arrow"
         class="glossy"
         rounded
         color="deep-orange"
@@ -68,7 +68,7 @@
       <q-btn
         v-else
         padding="10px 16px"
-        icon="sym_o_stop_circle"
+        icon="app:stop_circle"
         class="glossy"
         rounded
         color="grey-7"
@@ -76,7 +76,7 @@
         @click="stopCooking"
       />
       <q-btn
-        icon="sym_o_delete_forever"
+        icon="app:delete_forever"
         flat
         label="Удалить"
         color="deep-orange"

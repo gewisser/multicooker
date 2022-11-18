@@ -17,7 +17,7 @@
         <template v-slot:error>
           <div class="absolute-full column flex-center bg-negative text-white">
             <span>Не удалось загрузить изображение</span><br />
-            <q-icon name="sym_o_mood_bad" size="48px"></q-icon>
+            <q-icon name="app:mood_bad" size="48px"></q-icon>
           </div>
         </template>
       </ImagePreviewer>
@@ -28,7 +28,7 @@
           size="lg"
           padding="8px"
           color="deep-orange"
-          icon="sym_o_play_pause"
+          icon="app:play_pause"
           class="absolute"
           style="top: 0; right: 12px; transform: translateY(-50%)"
           @click.stop="applyDish(dish)"
@@ -43,14 +43,14 @@
           @update:model-value="onRatingChange"
           :max="5"
           size="32px"
-          icon="sym_o_grade"
-          icon-selected="sym_o_grade"
+          icon="app:grade"
+          icon-selected="app:grade"
         />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
         <div class="text-subtitle2 row items-center ingredient-list">
-          <q-icon name="sym_o_production_quantity_limits" size="18px" />
+          <q-icon name="app:production_quantity_limits" size="18px" />
           <div
             class="ingredient-list-item"
             v-for="ingredient in splitIngredients(dish.ingredients)"

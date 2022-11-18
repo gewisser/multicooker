@@ -9,7 +9,7 @@
       </q-img>
     </div>
 
-    <q-btn rounded flat dense color="white" icon="sym_o_close" />
+    <q-btn rounded flat dense color="white" icon="app:close" />
   </q-dialog>
 </template>
 

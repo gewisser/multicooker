@@ -33,7 +33,7 @@
                   class="absolute-full column flex-center bg-negative text-white"
                 >
                   <span>Не удалось загрузить изображение</span><br />
-                  <q-icon name="sym_o_mood_bad" size="48px"></q-icon>
+                  <q-icon name="app:mood_bad" size="48px"></q-icon>
                 </div>
               </template>
 
@@ -52,7 +52,7 @@
                   round
                   color="red-5"
                   size="sm"
-                  icon="sym_o_delete_forever"
+                  icon="app:delete_forever"
                   @click.stop="deleteImage(image)"
                   text-color="red-2"
                 />
@@ -75,7 +75,7 @@
             dark-percentage
             color="secondary"
             text-color="white"
-            icon="sym_o_add_a_photo"
+            icon="app:add_a_photo"
             @click="onClickBtn"
           />
         </div>
