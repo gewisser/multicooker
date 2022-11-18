@@ -1,4 +1,6 @@
 import { route } from 'quasar/wrappers';
+import { beforeEach } from './navigationGuard';
+
 import {
   createMemoryHistory,
   createRouter,
@@ -33,6 +35,8 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  Router.beforeEach(beforeEach());
 
   return Router;
 });

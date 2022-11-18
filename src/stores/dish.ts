@@ -164,6 +164,23 @@ export const useDish = defineStore('dish', () => {
     }, 700);
   }
 
+  async function deleteDish(id?: string) {
+    if (!id) {
+      id = currentDishProcess.value.id;
+    }
+
+    const dishId = dishList.value.findIndex((dish) => dish.id === id);
+
+    if (dishId === -1) {
+      console.warn('dish not found');
+      return;
+    }
+
+    dishList.value.splice(dishId, 1);
+
+    await saveDishList();
+  }
+
   return {
     dish,
     newDish,
@@ -177,5 +194,6 @@ export const useDish = defineStore('dish', () => {
     dishStatus,
     dishSources,
     resetCookingProcessData,
+    deleteDish,
   };
 });

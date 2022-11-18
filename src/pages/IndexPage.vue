@@ -107,7 +107,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useDish } from 'stores/appStore';
+import { useDish } from 'stores/dish';
 import { storeToRefs } from 'pinia';
 import { Duration } from 'luxon';
 import { debounce } from 'quasar';

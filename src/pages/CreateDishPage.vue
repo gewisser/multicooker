@@ -101,7 +101,7 @@ import GalleryImg from 'components/GalleryImg.vue';
 import { useQuasar } from 'quasar';
 import useS3 from 'src/composables/useS3';
 import AppTimer from 'components/AppTimer.vue';
-import { useDish } from 'stores/appStore';
+import { useDish } from 'stores/dish';
 import { storeToRefs } from 'pinia';
 import TempSettingControls from 'components/TSetCtrls.vue';
 

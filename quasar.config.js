@@ -38,6 +38,8 @@ module.exports = configure(function (/* ctx */) {
       errors: true,
     },
 
+    boot: ['notify-defaults'],
+
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
 

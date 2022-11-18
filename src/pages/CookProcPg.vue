@@ -82,7 +82,6 @@
         color="deep-orange"
         @click="onDeleteClick"
       />
-      <!--      <q-btn label="Сохранить" color="primary" text-color="white" icon="save" />-->
     </q-card-actions>
   </q-page>
 </template>
@@ -92,13 +91,13 @@
 <script lang="ts">
 import { defineComponent, toRef } from 'vue';
 import GalleryImg from 'components/GalleryImg.vue';
-import { useDish } from 'stores/appStore';
+import { useDish } from 'stores/dish';
 import { storeToRefs } from 'pinia';
 import { splitIngredients } from 'src/utils/dish';
 import AppTimer from 'components/AppTimer.vue';
 import { useQuasar } from 'quasar';
 import TempSettingControls from 'components/TSetCtrls.vue';
-import { onBeforeRouteLeave } from 'vue-router';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'CookingProcessPage',
@@ -110,6 +109,8 @@ export default defineComponent({
   setup() {
     const dishStore = useDish();
     const $q = useQuasar();
+    const router = useRouter();
+
     const { currentDishProcess, cooking } = storeToRefs(dishStore);
 
     function startCooking() {
@@ -126,11 +127,21 @@ export default defineComponent({
         message: 'Вы действительно хотите это блюдо?',
         cancel: true,
         persistent: true,
-      }).onOk(() => {
-        // dish.value.imageData.images.forEach((image) => {
-        //   S3.Delete(image.fileName, import.meta.env.VITE_S3_IMG_DIR);
-        // });
-        // dishStore.newDish();
+      }).onOk(async () => {
+        try {
+          await dishStore.deleteDish();
+          $q.notify({
+            type: 'success',
+            message: 'Блюдо успешно удалено',
+          });
+
+          router.push('/').then();
+        } catch (e) {
+          $q.notify({
+            type: 'error',
+            message: 'При удалении что-то пошло не так',
+          });
+        }
       });
     }
 
