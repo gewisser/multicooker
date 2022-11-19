@@ -22,6 +22,7 @@ export interface ICookingProcess {
   auto_heating: boolean;
   cooking_temperature: number;
   auto_heating_temp: number;
+  heating_cooking_time: number;
 }
 
 export type TDishStatus = 'waiting' | 'cooking' | 'heat';

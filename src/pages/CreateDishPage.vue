@@ -39,21 +39,10 @@
 
     <q-separator inset />
 
-    <div class="column items-center group-set">
-      <div class="column items-center">
-        <div class="text-grey-6">Общее время приготовления</div>
-        <AppTimer v-model="cooking.start_total_time" style="font-size: 16px" />
-      </div>
-      <div class="column items-center">
-        <div class="text-grey-6 text-center">
-          Время приготовления<br />от достижения заданной температуры
-        </div>
-        <AppTimer
-          v-model="cooking.start_cooking_time"
-          style="font-size: 16px"
-        />
-      </div>
-    </div>
+    <TimersBlock
+      :start-cooking-time="cooking.start_cooking_time"
+      :start-total-time="cooking.start_total_time"
+    />
 
     <q-card-actions
       class="q-px-none"
@@ -88,7 +77,6 @@
         color="deep-orange"
         @click="onDeleteClick"
       />
-      <!--      <q-btn label="Сохранить" color="primary" text-color="white" icon="save" />-->
     </q-card-actions>
   </q-page>
 </template>
@@ -100,14 +88,14 @@ import { defineComponent, toRef } from 'vue';
 import GalleryImg from 'components/GalleryImg.vue';
 import { useQuasar } from 'quasar';
 import useS3 from 'src/composables/useS3';
-import AppTimer from 'components/AppTimer.vue';
 import { useDish } from 'stores/dish';
 import { storeToRefs } from 'pinia';
 import TempSettingControls from 'components/TSetCtrls.vue';
+import TimersBlock from 'components/TimersBlock.vue';
 
 export default defineComponent({
   name: 'CreateDishPage',
-  components: { TempSettingControls, AppTimer, GalleryImg },
+  components: { TimersBlock, TempSettingControls, GalleryImg },
   setup() {
     const $q = useQuasar();
     const S3 = useS3();
@@ -130,7 +118,8 @@ export default defineComponent({
     }
 
     function startCooking() {
-      dishStore.startCooking(dish.value);
+      dishStore.applyDishSettings(dish.value);
+      dishStore.startCooking();
     }
 
     function stopCooking() {

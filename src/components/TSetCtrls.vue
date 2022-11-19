@@ -1,9 +1,12 @@
 <template>
   <div class="row items-center" style="margin-top: -1rem">
-    <div class="col-6 flex justify-center">
+    <div
+      class="flex justify-center"
+      :class="{ 'col-6': !hiddenHeatingTemp, 'col-12': hiddenHeatingTemp }"
+    >
       <div class="text-subtitle1 text-grey-6">T° приготовления</div>
     </div>
-    <div class="col-6 flex justify-center">
+    <div v-if="!hiddenHeatingTemp" class="col-6 flex justify-center">
       <q-toggle keep-color dense size="38px" v-model="auto_heating">
         <span class="text-subtitle1 text-grey-6">T° подогрева</span>
       </q-toggle>
@@ -11,7 +14,10 @@
   </div>
 
   <div class="row items-center" style="margin-top: -1rem">
-    <div class="col-6 flex justify-center">
+    <div
+      class="flex justify-center"
+      :class="{ 'col-6': !hiddenHeatingTemp, 'col-12': hiddenHeatingTemp }"
+    >
       <q-knob
         :step="1"
         v-model="cooking_temperature"
@@ -24,7 +30,7 @@
         class="text-orange"
       />
     </div>
-    <div class="col-6 flex justify-center">
+    <div v-if="!hiddenHeatingTemp" class="col-6 flex justify-center">
       <q-knob
         :step="1"
         v-model="auto_heating_temp"
@@ -60,6 +66,7 @@ export default defineComponent({
       type: Object as PropType<ICookingData>,
       required: true,
     },
+    hiddenHeatingTemp: { type: Boolean, default: false },
   },
   setup(props) {
     const { auto_heating, cooking_temperature, auto_heating_temp } =

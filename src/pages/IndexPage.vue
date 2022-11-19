@@ -5,7 +5,24 @@
 </route>
 
 <template>
-  <q-page class="column q-pa-lg form-page no-wrap">
+  <q-page
+    v-if="!dishList.length"
+    class="row items-center justify-evenly q-pa-lg"
+  >
+    <div class="column items-center" style="gap: 12px">
+      <q-icon color="bg" name="app:restaurant_menu" size="8rem" />
+      <div class="text-subtitle1 text-center">
+        У Вас нет ещё ни одного блюда
+      </div>
+      <q-btn
+        outline
+        color="primary"
+        label="Создать блюдо"
+        :to="{ name: 'CreateDishPage' }"
+      />
+    </div>
+  </q-page>
+  <q-page v-else class="column q-pa-lg form-page no-wrap">
     <q-card v-for="dish in dishList" class="my-card" :key="dish.id">
       <ImagePreviewer
         :src="dish.imageData.homeImgUrl || image_placeholder"
@@ -44,7 +61,7 @@
           :max="5"
           size="32px"
           icon="app:grade"
-          icon-selected="app:grade"
+          icon-selected="app:grade-fill"
         />
       </q-card-section>
 
@@ -125,7 +142,7 @@ export default defineComponent({
     const dishStore = useDish();
     const router = useRouter();
 
-    const { dishList, cooking } = storeToRefs(dishStore);
+    const { dishList } = storeToRefs(dishStore);
 
     const knobVal = ref(0);
     const stars = ref(0);
@@ -140,7 +157,7 @@ export default defineComponent({
     }, 4000);
 
     function applyDish(dish: IDish) {
-      cooking.value.id = dish.id;
+      dishStore.applyDishSettings(dish);
       router.push({ name: 'CookProcPg' }).then();
     }
 

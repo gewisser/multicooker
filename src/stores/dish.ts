@@ -57,15 +57,16 @@ export const useDish = defineStore('dish', () => {
     console.log('sent to ESP-32', data);
   }
 
-  function newCookingProcessData(id: string): ICookingProcess {
+  function newCookingProcessData(id?: string): ICookingProcess {
     return {
-      id,
+      id: id || '',
       current_temperature: 20,
       start_cooking_time: 0,
       start_total_time: 0,
       auto_heating: true,
       auto_heating_temp: 40,
       cooking_temperature: 100,
+      heating_cooking_time: 0,
     };
   }
 
@@ -136,17 +137,22 @@ export const useDish = defineStore('dish', () => {
     await saveDishList();
   }
 
-  function startCooking(applyDish: IDish | undefined) {
-    if (!applyDish) {
-      return;
+  function applyDishSettings(applyDish?: IDish) {
+    if (applyDish) {
+      cooking.id = applyDish.id;
+      cooking.auto_heating = applyDish.auto_heating;
+      cooking.auto_heating_temp = applyDish.auto_heating_temp;
+      cooking.cooking_temperature = applyDish.cooking_temperature;
+      cooking.heating_cooking_time = applyDish.heating_cooking_time;
+    } else {
+      cooking.id = '';
     }
 
-    cooking.id = applyDish.id;
-    cooking.start_total_time = Math.trunc(new Date().getTime() / 1000);
     cooking.current_temperature = 20;
-    cooking.auto_heating = applyDish.auto_heating;
-    cooking.auto_heating_temp = applyDish.auto_heating_temp;
-    cooking.cooking_temperature = applyDish.cooking_temperature;
+  }
+
+  function startCooking() {
+    cooking.start_total_time = Math.trunc(new Date().getTime() / 1000);
 
     // sent cooking obj to ESP-32
     sendProgramToESP(cooking);
@@ -155,13 +161,18 @@ export const useDish = defineStore('dish', () => {
       cooking.current_temperature = cooking.current_temperature + 5;
 
       if (
-        cooking.current_temperature >= dish.value.cooking_temperature &&
+        cooking.current_temperature >= cooking.cooking_temperature &&
         cooking.start_cooking_time === 0
       ) {
         cooking.start_cooking_time = Math.trunc(new Date().getTime() / 1000);
         clearInterval(timerHandle);
       }
     }, 700);
+  }
+
+  function stopCooking() {
+    clearInterval(timerHandle);
+    resetCookingProcessData();
   }
 
   async function deleteDish(id?: string) {
@@ -188,7 +199,9 @@ export const useDish = defineStore('dish', () => {
     dishList,
     getDishList,
     saveNewDishToList,
+    applyDishSettings,
     startCooking,
+    stopCooking,
     saveDishList,
     currentDishProcess,
     dishStatus,

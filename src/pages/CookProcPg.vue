@@ -33,21 +33,10 @@
 
     <q-separator inset />
 
-    <div class="column items-center group-set">
-      <div class="column items-center">
-        <div class="text-grey-6">Общее время приготовления</div>
-        <AppTimer v-model="cooking.start_total_time" style="font-size: 16px" />
-      </div>
-      <div class="column items-center">
-        <div class="text-grey-6 text-center">
-          Время приготовления<br />от достижения заданной температуры
-        </div>
-        <AppTimer
-          v-model="cooking.start_cooking_time"
-          style="font-size: 16px"
-        />
-      </div>
-    </div>
+    <TimersBlock
+      :start-cooking-time="cooking.start_cooking_time"
+      :start-total-time="cooking.start_total_time"
+    />
 
     <q-card-actions
       class="q-px-none q-mt-md"
@@ -94,17 +83,17 @@ import GalleryImg from 'components/GalleryImg.vue';
 import { useDish } from 'stores/dish';
 import { storeToRefs } from 'pinia';
 import { splitIngredients } from 'src/utils/dish';
-import AppTimer from 'components/AppTimer.vue';
 import { useQuasar } from 'quasar';
 import TempSettingControls from 'components/TSetCtrls.vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
+import TimersBlock from 'components/TimersBlock.vue';
 
 export default defineComponent({
   name: 'CookingProcessPage',
   components: {
+    TimersBlock,
     TempSettingControls,
     GalleryImg,
-    AppTimer,
   },
   setup() {
     const dishStore = useDish();
@@ -114,7 +103,7 @@ export default defineComponent({
     const { currentDishProcess, cooking } = storeToRefs(dishStore);
 
     function startCooking() {
-      dishStore.startCooking(currentDishProcess.value);
+      dishStore.startCooking();
     }
 
     function stopCooking() {
@@ -124,7 +113,7 @@ export default defineComponent({
     function onDeleteClick() {
       $q.dialog({
         title: 'Подтвердите',
-        message: 'Вы действительно хотите это блюдо?',
+        message: 'Вы действительно хотите удалить это блюдо?',
         cancel: true,
         persistent: true,
       }).onOk(async () => {
