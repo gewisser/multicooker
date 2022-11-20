@@ -65,7 +65,8 @@
         @click="stopCooking"
       />
       <q-btn
-        icon="app:delete_forever"
+        v-if="cooking.start_total_time === 0"
+        icon="app:delete_forever_fill"
         flat
         label="Удалить"
         color="deep-orange"
@@ -107,7 +108,18 @@ export default defineComponent({
     }
 
     function stopCooking() {
-      /**/
+      $q.dialog({
+        title: 'Подтвердите прерывание',
+        message: 'Вы действительно хотите завершить приготовление?',
+        cancel: true,
+        persistent: true,
+      }).onOk(async () => {
+        dishStore.stopCooking();
+        $q.notify({
+          type: 'success',
+          message: 'Приготовление остановлено!',
+        });
+      });
     }
 
     function onDeleteClick() {

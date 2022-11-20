@@ -5,7 +5,7 @@
     alt="Фото блюда"
     :ratio="16 / 9"
     @click="onImageClick"
-    placeholder-src="~assets/image_placeholder.svg"
+    :placeholder-src="image_placeholder"
   >
     <template v-slot:error>
       <div class="absolute-full column flex-center bg-negative text-white">

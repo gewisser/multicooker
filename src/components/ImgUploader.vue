@@ -14,7 +14,7 @@
               class="q-mb-sm img-gallery"
               src="~assets/image_placeholder.svg"
               :ratio="16 / 9"
-              placeholder-src="~assets/image_placeholder.svg"
+              :placeholder-src="image_placeholder"
               @click="onClickBtn"
             />
           </template>
@@ -26,7 +26,7 @@
               :src="image.url"
               :img-high-guality="image.url"
               :ratio="16 / 9"
-              placeholder-src="~assets/image_placeholder.svg"
+              :placeholder-src="image_placeholder"
             >
               <template v-slot:error>
                 <div
@@ -50,11 +50,9 @@
                 <q-btn
                   class="q-mr-md"
                   round
-                  color="red-5"
                   size="sm"
-                  icon="app:delete_forever"
+                  icon="app:delete_forever_fill"
                   @click.stop="deleteImage(image)"
-                  text-color="red-2"
                 />
               </div>
             </ImagePreviewer>
@@ -104,6 +102,7 @@ import type { IImageData } from 'src/models/Gallery';
 import ImagePreviewer from 'components/ImagePreviewer.vue';
 import { useQuasar } from 'quasar';
 import { IImageList } from 'src/models/Gallery';
+import image_placeholder from 'src/assets/image_placeholder.svg';
 
 export default defineComponent({
   name: 'ImgUploader',
@@ -187,6 +186,7 @@ export default defineComponent({
       isUploading,
       imageDataRef,
       deleteImage,
+      image_placeholder,
     };
   },
 });

@@ -71,7 +71,8 @@
         @click="stopCooking"
       />
       <q-btn
-        icon="app:delete_forever"
+        v-if="cooking.start_total_time === 0"
+        icon="app:delete_forever_fill"
         flat
         label="Удалить"
         color="deep-orange"
@@ -92,6 +93,7 @@ import { useDish } from 'stores/dish';
 import { storeToRefs } from 'pinia';
 import TempSettingControls from 'components/TSetCtrls.vue';
 import TimersBlock from 'components/TimersBlock.vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'CreateDishPage',
@@ -100,6 +102,7 @@ export default defineComponent({
     const $q = useQuasar();
     const S3 = useS3();
     const dishStore = useDish();
+    const router = useRouter();
 
     const { dish, cooking } = storeToRefs(dishStore);
 
@@ -125,12 +128,18 @@ export default defineComponent({
     function stopCooking() {
       $q.dialog({
         title: 'Подтвердите сохранение',
-        message: 'Вы действительно завершить приготовление и сохранить блюдо?',
+        message:
+          'Вы действительно хотите завершить приготовление и сохранить блюдо?',
         cancel: true,
         persistent: true,
       }).onOk(async () => {
         await dishStore.saveNewDishToList();
         dishStore.newDish();
+        $q.notify({
+          type: 'success',
+          message: 'Блюдо успешно создано!',
+        });
+        router.push('/').then();
       });
     }
 
