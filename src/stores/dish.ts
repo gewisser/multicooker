@@ -103,7 +103,10 @@ export const useDish = defineStore('dish', () => {
   async function getDishList() {
     try {
       const { data, status } = await api.get<IDish[]>(
-        `/${import.meta.env.VITE_S3_BUCKET}/${VITE_S3_DISH_LIST}`
+        `/${import.meta.env.VITE_S3_BUCKET}/${VITE_S3_DISH_LIST}`,
+        {
+          baseURL: import.meta.env.VITE_S3_URL,
+        }
       );
 
       if (status === 200) {

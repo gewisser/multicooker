@@ -40,7 +40,7 @@
       <q-list padding>
         <q-item-label header>Настройки</q-item-label>
 
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple :to="{ name: 'settings-WiFiPage' }">
           <q-item-section>
             <q-item-label>Wi-Fi</q-item-label>
             <q-item-label caption>
